@@ -25,13 +25,20 @@ int main(int argc, const char* argv[])
     char* cur_pos = buffer.data;
     tree.root = FillNodeDataFromBuffer(&cur_pos, &tree, tree.root);
 
-    printf("BUFF: %s\n", buffer.data);
-    printf("CUR_POS: %s\n", cur_pos);
+//     printf("BUFF: %s\n", buffer.data);
+//     printf("CUR_POS: %s\n", cur_pos);
+//
+//     printf("TREE_ROOT: %p\n", tree.root);
+//     printf("VAR_SIZE: %llu", tree.var.size);
+
+    //StartExpression(&tree);
+
+    StartDefferentiating(&tree);
 
     TreeDump(&tree);
 
-    // TreeDtor(&tree, &buffer);
-    // BufferDtor(&buffer);
+    TreeDtor(&tree);
+    BufferDtor(&buffer);
 
     return 0;
 }

@@ -183,7 +183,7 @@ Type DefineNewNodeType(char* cur_pos)
             case '/':
             return OP;
 
-            default: return VAR;
+            default: break;
         }
     }
 

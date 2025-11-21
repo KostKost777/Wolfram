@@ -23,7 +23,7 @@ void TreeDump(Tree* tree)
     PrintBazeNode(graphiz_file, tree);
 
     if (tree->size > 0) {
-
+        //printf("DUMP_TREE_ROOT: %p\n", tree->root);
         PrintBazeEdge(graphiz_file, tree);
         PrintTree(tree->root, graphiz_file);
     }
@@ -69,7 +69,7 @@ void PrintBazeEdge(FILE* graphiz_file,  Tree* tree)
                            tree, tree->root);
 }
 
-void PrintTree( Node* node, FILE* graphiz_file)
+void PrintTree(Node* node, FILE* graphiz_file)
 {
     assert(node);
     assert(graphiz_file);
@@ -128,16 +128,16 @@ void PrintGraphizNode(FILE* graphiz_file,  Node* node)
             node, node->parent, node, GetNodeTypeName(node));
 
     if (node->type == NUM)
-        fprintf(graphiz_file, "VALUE: %lf | ",
+        fprintf(graphiz_file, "VALUE: %lf",
                               node->value.num);
 
     else
-        fprintf(graphiz_file, "VALUE: %s  | ",
+        fprintf(graphiz_file, "VALUE: %s",
                               GetNodeValueName(node));
 
     if (node->left != NULL && node->right != NULL)
         fprintf(graphiz_file,
-                "{LEFT \\n PTR: %p | "
+                " | {LEFT \\n PTR: %p | "
                 " RIGHT \\n PTR: %p}} \" ]\n",
                 node->left,
                 node->right);
@@ -153,7 +153,7 @@ void FillLogFile(char* image_file_name,  Tree* tree, int file_counter)
 
     const int PICTURE_WIDTH = 2000;
 
-    fprintf(log_file, "\n\n<img src=image%d.png width=%dpx>\n\n",
+    fprintf(log_file, "\n\n<img src=image%d.svg width=%dpx>\n\n",
                        file_counter, PICTURE_WIDTH);
 
     fprintf(log_file, "--------------------------------------------------------------------------------------------------------------------------------------------\n\n");
@@ -207,7 +207,7 @@ static char* GetNewDotCmd(int file_counter)
     char str_command[100] = "";
 
     snprintf(str_command, sizeof(str_command),
-            "dot -Tpng image%d.txt -o image%d.png",
+            "dot -Tsvg image%d.txt -o image%d.svg",
              file_counter, file_counter);
 
     return strdup(str_command);
