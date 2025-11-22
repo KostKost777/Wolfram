@@ -161,36 +161,55 @@ Node* FillNodeDataFromBuffer(char** cur_pos, Tree* tree, Node* parent)
 Type DefineNewNodeType(char* cur_pos)
 {
     assert(cur_pos);
-    const int MAX_OBJ_LEN = 100;
 
+    const int MAX_OBJ_LEN = 100;
     char obj_name[MAX_OBJ_LEN] = {};
 
-    sscanf(cur_pos, "%s", obj_name);
+    double new_num = 0;
+    size_t obj_len = 0;
 
+    int status = sscanf(cur_pos, "%lf%llu", &new_num, &obj_len);
+    if (status != 0)
+        return NUM;
+
+    sscanf(cur_pos, "%s", obj_name);
     fprintf(log_file, "<strong>Прочитал такой объект: </strong> %s\n", obj_name);
 
-    size_t obj_len = strlen(obj_name);
-
+    obj_len = strlen(obj_name);
     fprintf(log_file, "<strong>Его длина: </strong> %llu\n", obj_len);
 
-    if (obj_len == 1)
+    if (IsOperation(obj_name, obj_len))
+        return OP;
+
+    return VAR;
+}
+
+bool IsOperation(char* name, size_t len)
+{
+    assert(name);
+
+    if (strcmp(name, "sin") == 0 ||
+        strcmp(name, "cos") == 0)
+        return true;
+
+    if (len == 1)
     {
-        switch(obj_name[0])
+        switch(name[0])
         {
             case '+':
             case '-':
             case '*':
             case '/':
-            return OP;
+            case '^':
+            case '%':
+                return true;
 
-            default: break;
+            default:
+                return false;
         }
     }
 
-    if ((obj_name[0] <= '9' && obj_name[0] >= '0') || obj_name[0] == '-')
-        return NUM;
-
-    return VAR;
+    return false;
 }
 
 char* ReadVariable(char** cur_pos)
@@ -199,7 +218,6 @@ char* ReadVariable(char** cur_pos)
     assert(*cur_pos);
 
     int len = 0;
-
     sscanf(*cur_pos, "%*s%n", &len);
 
     fprintf(log_file, "<strong>Посчитал длину переменной LEN:</strong> %d\n\n",
@@ -279,8 +297,10 @@ bool IsNil(char* cur_pos)
     char checker[4] = {};
 
     sscanf(cur_pos, "%3s", checker);
-    fprintf(log_file, "<strong>Прочитал потенциальный NIL получил:</strong> |%s|\n\n",
-                                                                             checker);
+    fprintf(log_file, "<strong>Прочитал потенциальный NIL получил:"
+                      "</strong> |%s|\n\n",
+                      checker);
+
     if (strcmp(checker, "nil") == 0)
         return true;
 
@@ -292,12 +312,14 @@ void SkipSpaces(char** cur_pos)
     assert(cur_pos);
 
     fprintf(log_file, "<strong>Пропускаю все пробельные символы</strong>\n\n");
-    fprintf(log_file, "<strong>До пропуска BUFFER:</strong> \n|%s|\n\n", *cur_pos);
+    fprintf(log_file, "<strong>До пропуска BUFFER:</strong> \n|%s|\n\n",
+                                                              *cur_pos);
 
     while (isspace(**cur_pos))
         *cur_pos += 1;
 
-    fprintf(log_file, "<strong>После пропуска BUFFER:</strong> \n|%s|\n\n", *cur_pos);
+    fprintf(log_file, "<strong>После пропуска BUFFER:</strong> \n|%s|\n\n",
+                                                                 *cur_pos);
 }
 
 int GetSizeOfFile(const char* filename)

@@ -85,8 +85,6 @@ Node* CopySubtree(Tree* tree, Node* node)
     if (node == NULL)
         return NULL;
 
-    tree->size++;
-
     switch(node->type)
     {
         case OP:
