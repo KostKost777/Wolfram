@@ -11,7 +11,7 @@ Status TreeCtor(Tree* tree)
     assert(tree);
 
     tree->size = 0;
-    tree->var.size = 0;
+    tree->root = NULL;
 
     return success;
 }
@@ -34,8 +34,8 @@ Tree StartDefferentiating(Tree* tree)
     assert(tree);
 
     Tree deff_tree = {};
-
     TreeCtor(&deff_tree);
+    deff_tree.var = tree->var;
 
     deff_tree.root = Defferentiate(&deff_tree, tree->root);
 
@@ -61,13 +61,16 @@ Node* Defferentiate(Tree* tree, Node* node)
             switch(node->value.op)
             {
                 case MUL:
-                    return ADD_( MUL_( dL, cR ), MUL_( cL, dR ));
+                    return ADD_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) );
 
                 case ADD:
                     return ADD_ ( dL, dR );
 
                 case SUB:
                     return SUB_ ( dL, dR );
+
+                case DIV:
+                    return DIV_ ( SUB_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ), MUL_ ( cR, cR ) );
 
                 default: break;
             }
@@ -160,11 +163,11 @@ void RequestVariableValue(Tree* tree)
 {
     assert(tree);
 
-    for (size_t i = 0; i < tree->var.size; ++i)
+    for (size_t i = 0; i < tree->var->size; ++i)
     {
-        printf("Введите значение переменной %s: ", tree->var.arr[i].var_name);
-        scanf("%lf", &tree->var.arr[i].var_data);
-        //printf("DATA: %lf\n\n", tree->var.arr[i].var_data);
+        printf("Введите значение переменной %s: ", tree->var->arr[i].var_name);
+        scanf("%lf", &tree->var->arr[i].var_data);
+        //printf("DATA: %lf\n\n", tree->var->arr[i].var_data);
     }
 }
 
@@ -220,10 +223,10 @@ double GetVariableValue(Tree* tree, char* var_name)
     assert(tree);
     assert(var_name);
 
-    for (size_t i = 0; i < tree->var.size; ++i)
+    for (size_t i = 0; i < tree->var->size; ++i)
     {
-        if (strcmp(var_name, tree->var.arr[i].var_name) == 0)
-            return tree->var.arr[i].var_data;
+        if (strcmp(var_name, tree->var->arr[i].var_name) == 0)
+            return tree->var->arr[i].var_data;
     }
 
     fprintf(log_file, "Не знаю такой переменной |%s|\n\n", var_name);
@@ -302,8 +305,6 @@ void DeleteNode(Tree* tree, Node* node)
     free(node->right);
     node->right = NULL;
 }
-
-
 
 void CloseLogFile()
 {

@@ -81,10 +81,7 @@ Node* FillNodeDataFromBuffer(char** cur_pos, Tree* tree, Node* parent)
                 node->value.var.var_name = ReadVariable(cur_pos);
                 node->value.var.var_hash = GetHash(node->value.var.var_name);
 
-                tree->var.arr[tree->var.size].var_name = node->value.var.var_name;
-                tree->var.arr[tree->var.size].var_hash = GetHash(node->value.var.var_name);
-
-                tree->var.size++;
+                UpdateVarArray(tree, node->value.var);
                 break;
 
             case OP:
@@ -156,6 +153,35 @@ Node* FillNodeDataFromBuffer(char** cur_pos, Tree* tree, Node* parent)
     }
 
     return NULL;
+}
+
+void UpdateVarArray(Tree* tree, Variable new_var)
+{
+    assert(tree);
+
+    bool is_really_new_var = true;
+
+    fprintf(log_file, "<strong>Наичнаю проверку новая ли это переменная</strong>\n\n");
+
+    for (size_t i = 0; i < tree->var->size; ++i)
+    {
+        if (new_var.var_hash == tree->var->arr[i].var_hash &&
+            strcmp(new_var.var_name, tree->var->arr[i].var_name) == 0)
+        {
+            fprintf(log_file, "<strong>Переменная |%s| уже есть</strong>\n\n", new_var.var_name);
+            is_really_new_var = false;
+        }
+    }
+
+    if (is_really_new_var)
+    {
+        fprintf(log_file, "<strong>Добавил новую переменную |%s|</strong>\n\n", new_var.var_name);
+
+        tree->var->arr[tree->var->size].var_name = new_var.var_name;
+        tree->var->arr[tree->var->size].var_hash = GetHash(new_var.var_name);
+
+        tree->var->size++;
+    }
 }
 
 Type DefineNewNodeType(char* cur_pos)

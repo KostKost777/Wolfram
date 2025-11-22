@@ -60,7 +60,7 @@ struct Tree
 {
     size_t size;
     int code_err;
-    VariableArr var;
+    VariableArr* var;
     Node* root;
 };
 
@@ -104,10 +104,10 @@ Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree);
 #define dR               Defferentiate(tree, node->right)
 #define cL               CopySubtree(tree, node->left)
 #define cR               CopySubtree(tree, node->right)
-#define DIV_(var1, var2) NewOpNode(DIV, var1, var2, tree)
 #define ADD_(var1, var2) NewOpNode(ADD, var1, var2, tree)
 #define SUB_(var1, var2) NewOpNode(SUB, var1, var2, tree)
 #define MUL_(var1, var2) NewOpNode(MUL, var1, var2, tree)
 #define DIV_(var1, var2) NewOpNode(DIV, var1, var2, tree)
+#define COMPOUND_FUNC_(var1) NewOpNode(MUL, var1, dR, tree);
 
 #endif

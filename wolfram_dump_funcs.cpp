@@ -5,6 +5,8 @@
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
 
+const char* tex_file_name = "wolfram_res.tex";
+
 void TreeDump(Tree* tree)
 {
     assert(tree);
@@ -13,7 +15,19 @@ void TreeDump(Tree* tree)
 
     static int file_counter = 0;
     char* image_file_name = GetNewImageFileName(file_counter);
+
+    FILE* tex_file = fopen(tex_file_name, "w");
     FILE* graphiz_file = fopen(image_file_name, "w");
+
+    fprintf(tex_file, "\\documentclass{article}\n"
+                       "\\usepackage{graphicx}\n\n"
+
+                        "\\title{вольфрам}\n"
+                        "\\author{Zinawe }\n"
+                        "\\date{November 2025}\n\n"
+
+                        "\\begin{document}\n"
+                        "\\maketitle\n");
 
     fprintf(graphiz_file, "digraph {\n"
                           "graph [charset=\"utf-8\"]"
@@ -25,13 +39,14 @@ void TreeDump(Tree* tree)
     if (tree->size > 0) {
         //printf("DUMP_TREE_ROOT: %p\n", tree->root);
         PrintBazeEdge(graphiz_file, tree);
-        PrintTree(tree->root, graphiz_file);
+        PrintTree(tree->root, graphiz_file, tex_file);
     }
 
     fprintf(graphiz_file, "}");
+    fprintf(tex_file, "\n\\end{document}");
 
     fclose(graphiz_file);
-
+    fclose(tex_file);
 
     char* command = GetNewDotCmd(file_counter);
 
@@ -69,27 +84,28 @@ void PrintBazeEdge(FILE* graphiz_file,  Tree* tree)
                            tree, tree->root);
 }
 
-void PrintTree(Node* node, FILE* graphiz_file)
+void PrintTree(Node* node, FILE* graphiz_file, FILE* tex_file)
 {
     assert(node);
     assert(graphiz_file);
 
-    //printf("(");
+    fprintf(tex_file, "(");
 
     PrintGraphizNode(graphiz_file, node);
     PrintGraphizEdge(graphiz_file, node);
 
+
     if (node->left){
         //printf("PTR: %p   PTR_LEFT: %p\n  ",node,  node->left);
-        PrintTree(node->left, graphiz_file);
+        PrintTree(node->left, graphiz_file, tex_file);
     }
 
-    //printf("%d", GetData(node));
+    PrintTex(tex_file, node);
 
     if (node->right)
-        PrintTree(node->right, graphiz_file);
+        PrintTree(node->right, graphiz_file, tex_file);
 
-    //printf(")");
+    fprintf(tex_file, ")");
 
 }
 
@@ -109,6 +125,46 @@ void PrintGraphizEdge(FILE* graphiz_file,  Node* node)
                 "node%p -> node%p "
                 "[dir = both tailport=se]\n",
                 node, node->right);
+    }
+}
+
+void PrintTex(FILE* tex_file, Node* node)
+{
+    assert(node);
+
+    switch(node->type)
+    {
+        case NUM:
+            fprintf(tex_file, "%.2lf", node->value.num);
+            break;
+
+        case VAR:
+            fprintf(tex_file, "%s", node->value.var.var_name);
+            break;
+
+        case OP:
+            switch(node->value.op)
+            {
+                case ADD:
+                    fprintf(tex_file, " + ");
+                    break;
+
+                case MUL:
+                    fprintf(tex_file, " * ");
+                    break;
+
+                case SUB:
+                    fprintf(tex_file, " - ");
+                    break;
+
+                case DIV:
+                    fprintf(tex_file, " / ");
+                    break;
+
+                default: break;
+            }
+
+        default: break;
     }
 }
 

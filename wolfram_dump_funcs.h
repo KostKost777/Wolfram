@@ -8,9 +8,11 @@ enum ErrCodes
     BAD_PARENT = 4,
 };
 
-void PrintTree(Node* node, FILE* graphiz_file);
+void PrintTree(Node* node, FILE* graphiz_file, FILE* tex_file);
 
 void TreeDump(Tree* tree);
+
+void PrintTex(FILE* tex_file, Node* node);
 
 void PrintGraphizNode(FILE* graphiz_file, Node* node);
 

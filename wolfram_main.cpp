@@ -21,6 +21,8 @@ int main(int argc, const char* argv[])
     Tree tree = {};
 
     TreeCtor(&tree);
+    tree.var = (VariableArr*)calloc(1, sizeof(VariableArr));
+    tree.var->size = 0;
 
     char* cur_pos = buffer.data;
     tree.root = FillNodeDataFromBuffer(&cur_pos, &tree, tree.root);
@@ -29,13 +31,13 @@ int main(int argc, const char* argv[])
 //     printf("CUR_POS: %s\n", cur_pos);
 //
 //     printf("TREE_ROOT: %p\n", tree.root);
-//     printf("VAR_SIZE: %llu", tree.var.size);
+//     printf("VAR_SIZE: %llu\n", tree.var->size);
 
     //StartExpression(&tree);
 
-    StartDefferentiating(&tree);
-
     TreeDump(&tree);
+
+    StartDefferentiating(&tree);
 
     TreeDtor(&tree);
     BufferDtor(&buffer);
