@@ -6,14 +6,14 @@
 
 int main(int argc, const char* argv[])
 {
-    atexit(CloseLogFile);
+    atexit(FilesClosingProcessing);
 
     const char* database_file_name = "database.txt";
 
     if (argc > 1)
         database_file_name = argv[1];
 
-    OpenLogFile("wolfram_log_file.html");
+    FilesOpeningProcessing();
 
     Buffer buffer = {};
     GetDataBaseFromFile(&buffer, database_file_name);

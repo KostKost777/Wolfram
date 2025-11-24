@@ -16,18 +16,8 @@ void TreeDump(Tree* tree)
     static int file_counter = 0;
     char* image_file_name = GetNewImageFileName(file_counter);
 
-    FILE* tex_file = fopen(tex_file_name, "w");
+    FILE* tex_file = fopen(tex_file_name, "a");
     FILE* graphiz_file = fopen(image_file_name, "w");
-
-    fprintf(tex_file, "\\documentclass{article}\n"
-                       "\\usepackage{graphicx}\n\n"
-
-                        "\\title{вольфрам}\n"
-                        "\\author{Zinawe }\n"
-                        "\\date{November 2025}\n\n"
-
-                        "\\begin{document}\n"
-                        "\\maketitle\n");
 
     fprintf(graphiz_file, "digraph {\n"
                           "graph [charset=\"utf-8\"]"
@@ -39,19 +29,23 @@ void TreeDump(Tree* tree)
     if (tree->size > 0) {
         //printf("DUMP_TREE_ROOT: %p\n", tree->root);
         PrintBazeEdge(graphiz_file, tree);
-        PrintTree(tree->root, graphiz_file, tex_file);
+        PrintTree(tree->root, graphiz_file);
+
+        fprintf(tex_file, "$$");
+        PrintTexTree(tree->root, tex_file);
+        fprintf(tex_file, "$$");
+        fprintf(tex_file, "\n\\vspace{1cm}\n");
     }
 
     fprintf(graphiz_file, "}");
-    fprintf(tex_file, "\n\\end{document}");
 
     fclose(graphiz_file);
     fclose(tex_file);
 
-    char* command = GetNewDotCmd(file_counter);
+    char* dot_cmd = GetNewDotCmd(file_counter);
 
-    system(command);
-    free(command);
+    system(dot_cmd);
+    free(dot_cmd);
 
     FillLogFile(image_file_name, tree, file_counter);
 
@@ -84,28 +78,78 @@ void PrintBazeEdge(FILE* graphiz_file,  Tree* tree)
                            tree, tree->root);
 }
 
-void PrintTree(Node* node, FILE* graphiz_file, FILE* tex_file)
+void PrintTexTree(Node* node, FILE* tex_file)
+{
+    assert(tex_file);
+    assert(node);
+
+    switch(node->type)
+    {
+        case NUM:
+            fprintf(tex_file, "%.2lf", node->value.num);
+            break;
+
+        case VAR:
+            fprintf(tex_file, "%s", node->value.var.var_name);
+            break;
+
+        case OP:
+            fprintf(tex_file, "\\left(");
+            switch(node->value.op)
+            {
+                case ADD:
+                    PrintTexTree(node->left, tex_file);
+                    fprintf(tex_file, " + ");
+                    PrintTexTree(node->right, tex_file);
+                    break;
+
+                case MUL:
+                    PrintTexTree(node->left, tex_file);
+                    fprintf(tex_file, " \\cdot ");
+                    PrintTexTree(node->right, tex_file);
+                    break;
+
+                case SUB:
+                    PrintTexTree(node->left, tex_file);
+                    fprintf(tex_file, " - ");
+                    PrintTexTree(node->right, tex_file);
+                    break;
+
+                case DIV:
+                    fprintf(tex_file, "\\frac{");
+                    PrintTexTree(node->left, tex_file);
+                    fprintf(tex_file, "}");
+
+                    fprintf(tex_file, "{");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "}");
+
+                    break;
+
+                default: break;
+            }
+            fprintf(tex_file, "\\right)");
+
+        default: break;
+    }
+}
+
+
+void PrintTree(Node* node, FILE* graphiz_file)
 {
     assert(node);
     assert(graphiz_file);
 
-    fprintf(tex_file, "(");
-
     PrintGraphizNode(graphiz_file, node);
     PrintGraphizEdge(graphiz_file, node);
 
-
     if (node->left){
         //printf("PTR: %p   PTR_LEFT: %p\n  ",node,  node->left);
-        PrintTree(node->left, graphiz_file, tex_file);
+        PrintTree(node->left, graphiz_file);
     }
 
-    PrintTex(tex_file, node);
-
     if (node->right)
-        PrintTree(node->right, graphiz_file, tex_file);
-
-    fprintf(tex_file, ")");
+        PrintTree(node->right, graphiz_file);
 
 }
 
@@ -125,46 +169,6 @@ void PrintGraphizEdge(FILE* graphiz_file,  Node* node)
                 "node%p -> node%p "
                 "[dir = both tailport=se]\n",
                 node, node->right);
-    }
-}
-
-void PrintTex(FILE* tex_file, Node* node)
-{
-    assert(node);
-
-    switch(node->type)
-    {
-        case NUM:
-            fprintf(tex_file, "%.2lf", node->value.num);
-            break;
-
-        case VAR:
-            fprintf(tex_file, "%s", node->value.var.var_name);
-            break;
-
-        case OP:
-            switch(node->value.op)
-            {
-                case ADD:
-                    fprintf(tex_file, " + ");
-                    break;
-
-                case MUL:
-                    fprintf(tex_file, " * ");
-                    break;
-
-                case SUB:
-                    fprintf(tex_file, " - ");
-                    break;
-
-                case DIV:
-                    fprintf(tex_file, " / ");
-                    break;
-
-                default: break;
-            }
-
-        default: break;
     }
 }
 
@@ -265,6 +269,16 @@ static char* GetNewDotCmd(int file_counter)
     snprintf(str_command, sizeof(str_command),
             "dot -Tsvg image%d.txt -o image%d.svg",
              file_counter, file_counter);
+
+    return strdup(str_command);
+}
+
+char* GetTexCmd()
+{
+    char str_command[100] = "";
+
+    snprintf(str_command, sizeof(str_command),
+            "pdflatex %s", tex_file_name);
 
     return strdup(str_command);
 }

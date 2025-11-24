@@ -5,6 +5,10 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
+const double EPSILON = 10E-6;
+
+extern const char* log_file_name;
+
 enum Status
 {
     success = 0,
@@ -68,9 +72,9 @@ Status TreeCtor(Tree* tree);
 
 Node* NodeCtor(Node* parent);
 
-void CloseLogFile();
+void FilesClosingProcessing();
 
-void OpenLogFile(const char* log_file_name);
+void FilesOpeningProcessing();
 
 size_t GetHash(char* str);
 
@@ -94,11 +98,19 @@ Node* Defferentiate(Tree* tree, Node* node);
 
 Node* CopySubtree(Tree* tree, Node* node);
 
+bool IsDoubleEqual(double num1, double num2);
+
 Node* NewNumNode(double num, Node* left, Node* right, Tree* tree);
 
 Node* NewVarNode(Variable var, Node* left, Node* right, Tree* tree);
 
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree);
+
+double ConstantsOptimization(Node* node, Tree* tree);
+
+Status NeutralElementOptimization(Node* node, Tree* tree);
+
+void RemoveNeutralElement(Tree* tree, Node* node_dad, Node* node_first_son);
 
 #define dL               Defferentiate(tree, node->left)
 #define dR               Defferentiate(tree, node->right)

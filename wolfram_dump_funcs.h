@@ -1,6 +1,8 @@
 #ifndef WOLFRAM_DUMP_FUNCS
 #define WOLFRAM_DUMP_FUNCS
 
+extern const char* tex_file_name;
+
 enum ErrCodes
 {
     BAD_SIZE = 1,
@@ -8,11 +10,11 @@ enum ErrCodes
     BAD_PARENT = 4,
 };
 
-void PrintTree(Node* node, FILE* graphiz_file, FILE* tex_file);
+void PrintTree(Node* node, FILE* graphiz_file);
 
 void TreeDump(Tree* tree);
 
-void PrintTex(FILE* tex_file, Node* node);
+void PrintTexTree(Node* node, FILE* tex_file);
 
 void PrintGraphizNode(FILE* graphiz_file, Node* node);
 
@@ -29,6 +31,8 @@ const char* GetNodeTypeName(Node* node);
 const char* GetNodeValueName(Node* node);
 
 static char* GetNewDotCmd(int file_counter);
+
+char* GetTexCmd();
 
 static char* GetNewImageFileName(int file_counter);
 

@@ -5,6 +5,7 @@
 #include "read_wolfram_database.h"
 
 FILE* log_file = NULL;
+const char* log_file_name = "wolfram_log_file.html";
 
 Status TreeCtor(Tree* tree)
 {
@@ -40,6 +41,21 @@ Tree StartDefferentiating(Tree* tree)
     deff_tree.root = Defferentiate(&deff_tree, tree->root);
 
     TreeDump(&deff_tree);
+
+    size_t old_size = 0;
+
+    while(old_size != deff_tree.size)
+    {
+       old_size = deff_tree.size;
+
+       ConstantsOptimization(deff_tree.root, &deff_tree);
+
+       TreeDump(&deff_tree);
+
+       NeutralElementOptimization(deff_tree.root, &deff_tree);
+
+       TreeDump(&deff_tree);
+    }
 
     return deff_tree;
 }
@@ -112,6 +128,177 @@ Node* CopySubtree(Tree* tree, Node* node)
     return NULL;
 }
 
+Status NeutralElementOptimization(Node* node, Tree* tree)
+{
+    assert(tree);
+
+    if (node == NULL)
+        return success;
+
+    if (node->type == OP)
+    {
+        if (node->value.op == ADD || node->value.op == SUB)
+        {
+            if (   node->right->type == NUM
+                && IsDoubleEqual(node->right->value.num, 0))
+            {
+                NeutralElementOptimization(node->left, tree);
+
+                RemoveNeutralElement(tree, node, node->right);
+            }
+
+            else if (   node->left->type == NUM
+                     && IsDoubleEqual(node->left->value.num, 0))
+            {
+                NeutralElementOptimization(node->right, tree);
+
+                RemoveNeutralElement(tree, node, node->left);
+            }
+        }
+
+        if (node->value.op == MUL || node->value.op == DIV)
+        {
+            if (   (node->right->type == NUM && IsDoubleEqual(node->right->value.num, 0))
+                || (node->left->type == NUM && IsDoubleEqual(node->left->value.num, 0)))
+            {
+                DeleteNode(tree, node);
+
+                node->type = NUM;
+                node->value.num = 0;
+            }
+
+            if (   node->right->type == NUM
+                && IsDoubleEqual(node->right->value.num, 1))
+            {
+                NeutralElementOptimization(node->left, tree);
+
+                RemoveNeutralElement(tree, node, node->right);
+            }
+
+            else if (   node->left->type == NUM
+                     && IsDoubleEqual(node->left->value.num, 1))
+            {
+                NeutralElementOptimization(node->right, tree);
+
+                RemoveNeutralElement(tree, node, node->left);
+            }
+        }
+    }
+
+    if (node != NULL)
+        NeutralElementOptimization(node->left, tree);
+
+    if (node != NULL)
+        NeutralElementOptimization(node->right, tree);
+
+    return success;
+
+}
+
+double ConstantsOptimization(Node* node, Tree* tree)
+{
+    assert(tree);
+    assert(node);
+
+    double left_res = 0;
+    double right_res = 0;
+
+    switch(node->type)
+    {
+        case NUM:
+            return node->value.num;
+
+        case VAR:
+            return NAN;
+
+        case OP:
+            left_res = ConstantsOptimization(node->left, tree);
+            right_res = ConstantsOptimization(node->right, tree);
+
+            if (!isnan(left_res) && !isnan(right_res))
+            {
+                free(node->left);
+                free(node->right);
+
+                node->left = NULL;
+                node->right = NULL;
+
+                tree->size -= 2;
+
+                double new_num_node_value = 0;
+
+                switch(node->value.op)
+                {
+                    case ADD: new_num_node_value = left_res + right_res;
+                              break;
+
+                    case SUB: new_num_node_value = left_res - right_res;
+                              break;
+
+
+                    case MUL: new_num_node_value = left_res * right_res;
+                              break;
+
+                    case DIV:
+
+                        if (!IsDoubleEqual(right_res, 0))
+                            new_num_node_value = left_res / right_res;
+
+                        else
+                        {
+                            fprintf(log_file, "Деление на ноль\n");
+                            new_num_node_value = NAN;
+                        }
+
+                        break;
+
+                    default: break;
+                }
+
+                node->type = NUM;
+                node->value.num = new_num_node_value;
+            }
+
+        default: break;
+    }
+
+    return NAN;
+}
+
+void RemoveNeutralElement(Tree* tree, Node* node_dad, Node* node_first_son)
+{
+    assert(node_dad);
+    assert(node_first_son);
+
+    Node* node_second_son = NULL;
+
+    if (node_first_son == node_dad->right)
+        node_second_son = node_dad->left;
+    else
+        node_second_son = node_dad->right;
+
+    if (node_dad->parent->left == node_dad)
+        node_dad->parent->left = node_second_son;
+    else
+        node_dad->parent->right = node_second_son;
+
+    free(node_first_son);
+    node_first_son = NULL;
+
+    free(node_dad);
+    node_dad = NULL;
+
+    tree->size -= 2;
+}
+
+bool IsDoubleEqual(double num1, double num2)
+{
+    assert(!isnan(num1));
+    assert(!isnan(num2));
+
+    return abs(num1 - num2) < EPSILON;
+}
+
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 {
     Node* new_node = (Node*)calloc(1, sizeof(Node));
@@ -119,6 +306,10 @@ Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 
     new_node->left = left;
     new_node->right = right;
+
+    if (left) left->parent = new_node;
+    if (right) right->parent = new_node;
+
     new_node->type = OP;
     new_node->value.op = op;
 
@@ -134,6 +325,10 @@ Node* NewNumNode(double num, Node* left, Node* right, Tree* tree)
 
     new_node->left = left;
     new_node->right = right;
+
+    if (left) left->parent = new_node;
+    if (right) right->parent = new_node;
+
     new_node->type = NUM;
     new_node->value.num = num;
 
@@ -149,6 +344,10 @@ Node* NewVarNode(Variable var, Node* left, Node* right, Tree* tree)
 
     new_node->left = left;
     new_node->right = right;
+
+    if (left) left->parent = new_node;
+    if (right) right->parent = new_node;
+
     new_node->type = VAR;
     new_node->value.var.var_name = var.var_name;
     new_node->value.var.var_hash = var.var_hash;
@@ -202,7 +401,7 @@ double CalculateExpression(Tree* tree, Node* node)
                 case SUB: return left_result - right_result;
                 case MUL: return left_result * right_result;
                 case DIV:
-                    if (right_result != 0)
+                    if (!IsDoubleEqual(right_result, 0))
                         return left_result / right_result;
                     else
                         fprintf(log_file, "Деление на ноль\n");
@@ -306,13 +505,24 @@ void DeleteNode(Tree* tree, Node* node)
     node->right = NULL;
 }
 
-void CloseLogFile()
+void FilesClosingProcessing()
 {
     fclose(log_file);
     printf("Logfile close");
+
+    FILE* tex_file = fopen(tex_file_name, "a");
+
+    fprintf(tex_file, "\n\\end{document}");
+
+    fclose(tex_file);
+
+    char* tex_cmd = GetTexCmd();
+
+    system(tex_cmd);
+    free(tex_cmd);
 }
 
-void OpenLogFile(const char* log_file_name)
+void FilesOpeningProcessing()
 {
     log_file = fopen(log_file_name, "w");
 
@@ -321,6 +531,27 @@ void OpenLogFile(const char* log_file_name)
 
     else
         printf("Logfile open ERROR\n");
+
+    FILE* tex_file = fopen(tex_file_name, "w");
+    fclose(tex_file);
+
+    tex_file = fopen(tex_file_name, "a");
+
+
+
+    fprintf(tex_file, "\\documentclass{article}\n"
+                       "\\usepackage{graphicx}\n\n"
+
+
+                        "\\title{Wolfram}\n"
+                        "\\author{Zinawe}\n"
+                        "\\date{November 2025}\n\n"
+
+
+                        "\\begin{document}\n"
+                        "\\maketitle\n");
+
+    fclose(tex_file);
 
     fprintf(log_file, "<pre>\n");
 }
