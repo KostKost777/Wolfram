@@ -3,6 +3,7 @@
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
+#include "common_funcs.h"
 
 FILE* log_file = NULL;
 const char* log_file_name = "wolfram_log_file.html";
@@ -74,21 +75,10 @@ Node* Defferentiate(Tree* tree, Node* node)
             return NewNumNode(1, NULL, NULL, tree);
 
         case OP:
-            switch(node->value.op)
+            for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
-                case MUL:
-                    return ADD_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) );
-
-                case ADD:
-                    return ADD_ ( dL, dR );
-
-                case SUB:
-                    return SUB_ ( dL, dR );
-
-                case DIV:
-                    return DIV_ ( SUB_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ), MUL_ ( cR, cR ) );
-
-                default: break;
+                if (all_op[i].op == node->value.op)
+                    return all_op[i].diff_op_func(tree, node);
             }
 
         default: break;
@@ -375,9 +365,6 @@ double CalculateExpression(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
-    double left_result = 0;
-    double right_result = 0;
-
     switch(node->type)
     {
         case NUM:
@@ -388,28 +375,13 @@ double CalculateExpression(Tree* tree, Node* node)
             return GetVariableValue(tree, node->value.var.var_name);
 
         case OP:
-            if (node->left != NULL)
-                left_result = CalculateExpression(tree, node->left);
-
-            if (node->right != NULL)
-                right_result = CalculateExpression(tree, node->right);
 
             //printf("RET OP: LEFT: %lf  RIGHT %lf\n", left_result, right_result);
-            switch(node->value.op)
+            for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
-                case ADD: return left_result + right_result;
-                case SUB: return left_result - right_result;
-                case MUL: return left_result * right_result;
-                case DIV:
-                    if (!IsDoubleEqual(right_result, 0))
-                        return left_result / right_result;
-                    else
-                        fprintf(log_file, "Деление на ноль\n");
-                    break;
-
-                default: break;
+                if (all_op[i].op == node->value.op)
+                    return all_op[i].op_func(tree, node);
             }
-            break;
 
         default: break;
     }

@@ -3,6 +3,7 @@
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
+#include "common_funcs.h"
 
 int main(int argc, const char* argv[])
 {
@@ -33,7 +34,7 @@ int main(int argc, const char* argv[])
 //     printf("TREE_ROOT: %p\n", tree.root);
 //     printf("VAR_SIZE: %llu\n", tree.var->size);
 
-    //StartExpression(&tree);
+    StartExpression(&tree);
 
     TreeDump(&tree);
 

@@ -5,6 +5,7 @@
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
+#include "common_funcs.h"
 
 Status GetDataBaseFromFile(Buffer* buffer,
                            const char* input_filename)

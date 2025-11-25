@@ -5,6 +5,8 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
+const int NUM_OF_OP = 4;
+
 const double EPSILON = 10E-6;
 
 extern const char* log_file_name;

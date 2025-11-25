@@ -1,9 +1,9 @@
-
 #include<TXLib.h>
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
+#include "common_funcs.h"
 
 const char* tex_file_name = "wolfram_res.tex";
 
@@ -27,7 +27,7 @@ void TreeDump(Tree* tree)
     PrintBazeNode(graphiz_file, tree);
 
     if (tree->size > 0) {
-        //printf("DUMP_TREE_ROOT: %p\n", tree->root);
+        printf("DUMP_TREE_ROOT: %p\n", tree->root);
         PrintBazeEdge(graphiz_file, tree);
         PrintTree(tree->root, graphiz_file);
 
@@ -64,7 +64,7 @@ void PrintBazeNode(FILE* graphiz_file,  Tree* tree)
             "style = filled, "
             "fillcolor = \"#DD7538\", "
             "color = \"#00000\", "
-            "label = \" {PTR: %p | SIZE: %llu | ROOT: %p} \"]",
+            "label = \" {PTR: %p | SIZE: %llu | ROOT: %p} \"]\n",
             tree, tree, tree->size, tree->root);
 
 }
@@ -177,6 +177,54 @@ void PrintGraphizNode(FILE* graphiz_file,  Node* node)
     assert(node);
     assert(graphiz_file);
 
+    #ifndef DEBUG
+
+    switch(node->type)
+    {
+        case OP:
+
+            fprintf(graphiz_file,
+                    "node%p "
+                    "[shape = Mrecord, "
+                    "style = filled, "
+                    "fillcolor = \"#8ABAD3\", "
+                    "color = \"#00000\", "
+                    "label = \" {%s} \" ]\n",
+                    node, GetNodeValueName(node));
+            break;
+
+        case VAR:
+
+            fprintf(graphiz_file,
+                    "node%p "
+                    "[shape = octagon,"
+                    "style = filled, "
+                    "fillcolor = \"#29f206ff\", "
+                    "color = \"#00000\", "
+                    "label = \" %s \" ]\n",
+                    node, GetNodeValueName(node));
+            break;
+
+        case NUM:
+
+            fprintf(graphiz_file,
+                    "node%p "
+                    "[shape = ellipse,"
+                    "style = filled, "
+                    "fillcolor = \"#f7cb3dff\", "
+                    "color = \"#00000\", "
+                    "label = \" %g \" ]\n",
+                    node, node->value.num);
+            break;
+
+        default: break;
+
+    }
+
+    #endif
+
+    #ifdef DEBUG
+
     fprintf(graphiz_file,
             "node%p "
             "[shape = Mrecord, "
@@ -203,6 +251,8 @@ void PrintGraphizNode(FILE* graphiz_file,  Node* node)
                 node->right);
     else
         fprintf(graphiz_file, "} \" ]\n");
+
+    #endif
 
 }
 
@@ -243,14 +293,12 @@ const char* GetNodeValueName(Node* node)
     switch(node->type)
     {
         case OP:
-            switch(node->value.op)
+            for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
-                case ADD: return "ADD";
-                case SUB: return "SUB";
-                case MUL: return "MUL";
-                case DIV: return "DIV";
-                default : return NULL;
+                if (all_op[i].op == node->value.op)
+                    return all_op[i].name;
             }
+            break;
 
         case VAR:
             return node->value.var.var_name;
