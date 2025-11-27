@@ -1,0 +1,6 @@
+( +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )

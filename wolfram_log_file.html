@@ -2,7 +2,12 @@
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|( log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 0 
@@ -10,52 +15,85 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|( log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|( log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-| log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| +
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|log (sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|+
+    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
 
-<strong>Прочитал такой объект: </strong> |log|
-<strong>Его длина: </strong> 3
-<strong>Посчитал длину операции LEN:</strong> 3
+<strong>Прочитал такой объект: </strong> |+|
+<strong>Его длина: </strong> 1
+<strong>Посчитал длину операции LEN:</strong> 1
 
-<strong>Получил имя операции NAME:</strong> |log|
+<strong>Получил имя операции NAME:</strong> |+|
 
 <strong>Буфер после считывания операции</strong>
-<strong>BUFFER:</strong> |(sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c7eb62f0 
+<strong>NODE_PTR:</strong> 00000160d05162f0 
 <strong>TYPE:</strong> |OP| 
-<strong>VALUE:</strong> |log| 
+<strong>VALUE:</strong> |+| 
 
 <strong>Увеличил размер SIZE:</strong> 1 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|(sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 1 
@@ -63,52 +101,80 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|(sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|    (tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|(sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|(tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-|sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|sin nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|tg nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
 
-<strong>Прочитал такой объект: </strong> |sin|
-<strong>Его длина: </strong> 3
-<strong>Посчитал длину операции LEN:</strong> 3
+<strong>Прочитал такой объект: </strong> |tg|
+<strong>Его длина: </strong> 2
+<strong>Посчитал длину операции LEN:</strong> 2
 
-<strong>Получил имя операции NAME:</strong> |sin|
+<strong>Получил имя операции NAME:</strong> |tg|
 
 <strong>Буфер после считывания операции</strong>
-<strong>BUFFER:</strong> |nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94fabf0 
+<strong>NODE_PTR:</strong> 00000160d1ceac40 
 <strong>TYPE:</strong> |OP| 
-<strong>VALUE:</strong> |sin| 
+<strong>VALUE:</strong> |tg| 
 
 <strong>Увеличил размер SIZE:</strong> 2 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 2 
@@ -116,36 +182,60 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-| ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| ( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| ( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил левый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fabf0 
+<strong>У этого узла:</strong> 00000160d1ceac40 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 2 
@@ -153,27 +243,47 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|( * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|( * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-| * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| * (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| * (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|* (x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|* (x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
@@ -185,11 +295,15 @@
 <strong>Получил имя операции NAME:</strong> |*|
 
 <strong>Буфер после считывания операции</strong>
-<strong>BUFFER:</strong> |(x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |(x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94fac30 
+<strong>NODE_PTR:</strong> 00000160d1ceac80 
 <strong>TYPE:</strong> |OP| 
 <strong>VALUE:</strong> |*| 
 
@@ -198,7 +312,11 @@
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|(x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|(x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 3 
@@ -206,27 +324,47 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|(x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|(x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|(x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|(x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-|x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|x nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|x nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
@@ -238,7 +376,11 @@
 <strong>Получил имя переменой NAME:</strong> |x|
 
 <strong>Буфер после считывания переменной</strong>
-<strong>BUFFER:</strong> |nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Наичнаю проверку новая ли это переменная</strong>
@@ -246,7 +388,7 @@
 <strong>Добавил новую переменную |x|</strong>
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94fac70 
+<strong>NODE_PTR:</strong> 00000160d1ceacc0 
 <strong>TYPE:</strong> |VAR| 
 <strong>VALUE:</strong> |x| 
 
@@ -255,7 +397,11 @@
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 4 
@@ -263,36 +409,60 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-| nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил левый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fac70 
+<strong>У этого узла:</strong> 00000160d1ceacc0 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 4 
@@ -300,55 +470,91 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-|) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил правый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fac70
+<strong>У этого узла:</strong> 00000160d1ceacc0
 
  <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 Пропустил ")": 
-| (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94fac70</strong> 
+<strong>Сейчас верну этот указатель 00000160d1ceacc0</strong> 
 
-<strong>Завершил левый узел:</strong> 00000283c94fac70 
-<strong>У этого узла:</strong> 00000283c94fac30 
+<strong>Завершил левый узел:</strong> 00000160d1ceacc0 
+<strong>У этого узла:</strong> 00000160d1ceac80 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-| (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 4 
@@ -356,27 +562,47 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| (5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| (5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|(5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|(5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-|5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|5 nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|5 nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
@@ -386,11 +612,15 @@
 <strong>Получил число NUM:</strong> |5.000000|
 
 <strong>Буфер после считывания числа</strong>
-<strong>BUFFER:</strong> | nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> | nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94facb0 
+<strong>NODE_PTR:</strong> 00000160d1cead00 
 <strong>TYPE:</strong> |NUM| 
 <strong>VALUE:</strong> |5.000000| 
 
@@ -399,7 +629,11 @@
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-| nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 5 
@@ -407,36 +641,60 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-| nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил левый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94facb0 
+<strong>У этого узла:</strong> 00000160d1cead00 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 5 
@@ -444,93 +702,153 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|nil) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-|) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил правый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94facb0
+<strong>У этого узла:</strong> 00000160d1cead00
 
  <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) ) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 Пропустил ")": 
-| ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94facb0</strong> 
+<strong>Сейчас верну этот указатель 00000160d1cead00</strong> 
 
-<strong>Завершил правый узел:</strong> 00000283c94facb0 
-<strong>У этого узла:</strong> 00000283c94fac30
+<strong>Завершил правый узел:</strong> 00000160d1cead00 
+<strong>У этого узла:</strong> 00000160d1ceac80
 
  <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| ) ) ( pow (x nil nil ) (3 nil nil) ) )
+| ) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) ) ( pow (x nil nil ) (3 nil nil) ) )
+|) )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 Пропустил ")": 
-| ) ( pow (x nil nil ) (3 nil nil) ) )
+| )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94fac30</strong> 
+<strong>Сейчас верну этот указатель 00000160d1ceac80</strong> 
 
-<strong>Завершил правый узел:</strong> 00000283c94fac30 
-<strong>У этого узла:</strong> 00000283c94fabf0
+<strong>Завершил правый узел:</strong> 00000160d1ceac80 
+<strong>У этого узла:</strong> 00000160d1ceac40
 
  <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| ) ( pow (x nil nil ) (3 nil nil) ) )
+| )
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) ( pow (x nil nil ) (3 nil nil) ) )
+|)
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 Пропустил ")": 
-| ( pow (x nil nil ) (3 nil nil) ) )
+|
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94fabf0</strong> 
+<strong>Сейчас верну этот указатель 00000160d1ceac40</strong> 
 
-<strong>Завершил левый узел:</strong> 00000283c94fabf0 
-<strong>У этого узла:</strong> 00000283c7eb62f0 
+<strong>Завершил левый узел:</strong> 00000160d1ceac40 
+<strong>У этого узла:</strong> 00000160d05162f0 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-| ( pow (x nil nil ) (3 nil nil) ) )
+|
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 5 
@@ -538,27 +856,43 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| ( pow (x nil nil ) (3 nil nil) ) )
+|
+    (pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|( pow (x nil nil ) (3 nil nil) ) )
+|(pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-| pow (x nil nil ) (3 nil nil) ) )
+|pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| pow (x nil nil ) (3 nil nil) ) )
+|pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|pow (x nil nil ) (3 nil nil) ) )
+|pow
+        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
@@ -570,11 +904,13 @@
 <strong>Получил имя операции NAME:</strong> |pow|
 
 <strong>Буфер после считывания операции</strong>
-<strong>BUFFER:</strong> |(x nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94facf0 
+<strong>NODE_PTR:</strong> 00000160d1cead40 
 <strong>TYPE:</strong> |OP| 
 <strong>VALUE:</strong> |pow| 
 
@@ -583,7 +919,9 @@
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|(x nil nil ) (3 nil nil) ) )
+|        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>SIZE:</strong> 6 
@@ -591,27 +929,200 @@
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|(x nil nil ) (3 nil nil) ) )
+|        (log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|(x nil nil ) (3 nil nil) ) )
+|(log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-|x nil nil ) (3 nil nil) ) )
+|log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|x nil nil ) (3 nil nil) ) )
+|log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|x nil nil ) (3 nil nil) ) )
+|log
+            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пытаюсь понять какой тип объекта:</strong>
+
+<strong>Прочитал такой объект: </strong> |log|
+<strong>Его длина: </strong> 3
+<strong>Посчитал длину операции LEN:</strong> 3
+
+<strong>Получил имя операции NAME:</strong> |log|
+
+<strong>Буфер после считывания операции</strong>
+<strong>BUFFER:</strong> |            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Создал новую вершину</strong>
+<strong>NODE_PTR:</strong> 00000160d1cead80 
+<strong>TYPE:</strong> |OP| 
+<strong>VALUE:</strong> |log| 
+
+<strong>Увеличил размер SIZE:</strong> 7 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 7 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|            (sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Обнаружил скобку "("</strong>
+
+<strong>Пропустил скобку:</strong> 
+|sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|sh nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пытаюсь понять какой тип объекта:</strong>
+
+<strong>Прочитал такой объект: </strong> |sh|
+<strong>Его длина: </strong> 2
+<strong>Посчитал длину операции LEN:</strong> 2
+
+<strong>Получил имя операции NAME:</strong> |sh|
+
+<strong>Буфер после считывания операции</strong>
+<strong>BUFFER:</strong> |nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Создал новую вершину</strong>
+<strong>NODE_PTR:</strong> 00000160d1ceadc0 
+<strong>TYPE:</strong> |OP| 
+<strong>VALUE:</strong> |sh| 
+
+<strong>Увеличил размер SIZE:</strong> 8 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 8 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|nil (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Прочитал потенциальный NIL получил:</strong> |nil|
+
+<strong>Пропустил "nil":</strong> 
+| (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+| (x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Завершил левый узел:</strong> 0000000000000000 
+<strong>У этого узла:</strong> 00000160d1ceadc0 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|(x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 8 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|(x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Обнаружил скобку "("</strong>
+
+<strong>Пропустил скобку:</strong> 
+|x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|x nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
@@ -623,7 +1134,8 @@
 <strong>Получил имя переменой NAME:</strong> |x|
 
 <strong>Буфер после считывания переменной</strong>
-<strong>BUFFER:</strong> |nil nil ) (3 nil nil) ) )
+<strong>BUFFER:</strong> |nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Наичнаю проверку новая ли это переменная</strong>
@@ -631,155 +1143,472 @@
 <strong>Переменная |x| уже есть</strong>
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94fad30 
+<strong>NODE_PTR:</strong> 00000160d1ceae00 
 <strong>TYPE:</strong> |VAR| 
 <strong>VALUE:</strong> |x| 
 
-<strong>Увеличил размер SIZE:</strong> 7 
+<strong>Увеличил размер SIZE:</strong> 9 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil nil ) (3 nil nil) ) )
+|nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>SIZE:</strong> 7 
+<strong>SIZE:</strong> 9 
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil nil ) (3 nil nil) ) )
+|nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil nil ) (3 nil nil) ) )
+|nil nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-| nil ) (3 nil nil) ) )
+| nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| nil ) (3 nil nil) ) )
+| nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil ) (3 nil nil) ) )
+|nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил левый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fad30 
+<strong>У этого узла:</strong> 00000160d1ceae00 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-|nil ) (3 nil nil) ) )
+|nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>SIZE:</strong> 7 
+<strong>SIZE:</strong> 9 
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|nil ) (3 nil nil) ) )
+|nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|nil ) (3 nil nil) ) )
+|nil))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Прочитал потенциальный NIL получил:</strong> |nil|
 
 <strong>Пропустил "nil":</strong> 
-| ) (3 nil nil) ) )
+|))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| ) (3 nil nil) ) )
+|))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) (3 nil nil) ) )
+|))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Завершил правый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fad30
+<strong>У этого узла:</strong> 00000160d1ceae00
 
  <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|) (3 nil nil) ) )
+|))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|) (3 nil nil) ) )
+|))
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 Пропустил ")": 
-| (3 nil nil) ) )
+|)
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94fad30</strong> 
+<strong>Сейчас верну этот указатель 00000160d1ceae00</strong> 
 
-<strong>Завершил левый узел:</strong> 00000283c94fad30 
-<strong>У этого узла:</strong> 00000283c94facf0 
+<strong>Завершил правый узел:</strong> 00000160d1ceae00 
+<strong>У этого узла:</strong> 00000160d1ceadc0
+
+ <strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|)
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|)
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+Пропустил ")": 
+|
+            (ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Сейчас верну этот указатель 00000160d1ceadc0</strong> 
+
+<strong>Завершил левый узел:</strong> 00000160d1ceadc0 
+<strong>У этого узла:</strong> 00000160d1cead80 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
 <strong>BUFFER:</strong> 
-| (3 nil nil) ) )
+|
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
-<strong>SIZE:</strong> 7 
+<strong>SIZE:</strong> 9 
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-| (3 nil nil) ) )
+|
+            (ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|(3 nil nil) ) )
+|(ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Обнаружил скобку "("</strong>
 
 <strong>Пропустил скобку:</strong> 
-|3 nil nil) ) )
+|ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>Пропускаю все пробельные символы</strong>
 
 <strong>До пропуска BUFFER:</strong> 
-|3 nil nil) ) )
+|ch nil (x nil nil))) (2 nil nil) ) )
 |
 
 <strong>После пропуска BUFFER:</strong> 
-|3 nil nil) ) )
+|ch nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пытаюсь понять какой тип объекта:</strong>
+
+<strong>Прочитал такой объект: </strong> |ch|
+<strong>Его длина: </strong> 2
+<strong>Посчитал длину операции LEN:</strong> 2
+
+<strong>Получил имя операции NAME:</strong> |ch|
+
+<strong>Буфер после считывания операции</strong>
+<strong>BUFFER:</strong> |nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Создал новую вершину</strong>
+<strong>NODE_PTR:</strong> 00000160d1ceae40 
+<strong>TYPE:</strong> |OP| 
+<strong>VALUE:</strong> |ch| 
+
+<strong>Увеличил размер SIZE:</strong> 10 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 10 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|nil (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Прочитал потенциальный NIL получил:</strong> |nil|
+
+<strong>Пропустил "nil":</strong> 
+| (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+| (x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Завершил левый узел:</strong> 0000000000000000 
+<strong>У этого узла:</strong> 00000160d1ceae40 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|(x nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 10 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|(x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Обнаружил скобку "("</strong>
+
+<strong>Пропустил скобку:</strong> 
+|x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|x nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|x nil nil))) (2 nil nil) ) )
+|
+
+<strong>Пытаюсь понять какой тип объекта:</strong>
+
+<strong>Прочитал такой объект: </strong> |x|
+<strong>Его длина: </strong> 1
+<strong>Посчитал длину переменной LEN:</strong> 1
+
+<strong>Получил имя переменой NAME:</strong> |x|
+
+<strong>Буфер после считывания переменной</strong>
+<strong>BUFFER:</strong> |nil nil))) (2 nil nil) ) )
+|
+
+<strong>Наичнаю проверку новая ли это переменная</strong>
+
+<strong>Переменная |x| уже есть</strong>
+
+<strong>Создал новую вершину</strong>
+<strong>NODE_PTR:</strong> 00000160d1ceae80 
+<strong>TYPE:</strong> |VAR| 
+<strong>VALUE:</strong> |x| 
+
+<strong>Увеличил размер SIZE:</strong> 11 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|nil nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 11 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|nil nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|nil nil))) (2 nil nil) ) )
+|
+
+<strong>Прочитал потенциальный NIL получил:</strong> |nil|
+
+<strong>Пропустил "nil":</strong> 
+| nil))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+| nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|nil))) (2 nil nil) ) )
+|
+
+<strong>Завершил левый узел:</strong> 0000000000000000 
+<strong>У этого узла:</strong> 00000160d1ceae80 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+|nil))) (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 11 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|nil))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|nil))) (2 nil nil) ) )
+|
+
+<strong>Прочитал потенциальный NIL получил:</strong> |nil|
+
+<strong>Пропустил "nil":</strong> 
+|))) (2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|))) (2 nil nil) ) )
+|
+
+<strong>Завершил правый узел:</strong> 0000000000000000 
+<strong>У этого узла:</strong> 00000160d1ceae80
+
+ <strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|))) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|))) (2 nil nil) ) )
+|
+
+Пропустил ")": 
+|)) (2 nil nil) ) )
+|
+
+<strong>Сейчас верну этот указатель 00000160d1ceae80</strong> 
+
+<strong>Завершил правый узел:</strong> 00000160d1ceae80 
+<strong>У этого узла:</strong> 00000160d1ceae40
+
+ <strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|)) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|)) (2 nil nil) ) )
+|
+
+Пропустил ")": 
+|) (2 nil nil) ) )
+|
+
+<strong>Сейчас верну этот указатель 00000160d1ceae40</strong> 
+
+<strong>Завершил правый узел:</strong> 00000160d1ceae40 
+<strong>У этого узла:</strong> 00000160d1cead80
+
+ <strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|) (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|) (2 nil nil) ) )
+|
+
+Пропустил ")": 
+| (2 nil nil) ) )
+|
+
+<strong>Сейчас верну этот указатель 00000160d1cead80</strong> 
+
+<strong>Завершил левый узел:</strong> 00000160d1cead80 
+<strong>У этого узла:</strong> 00000160d1cead40 
+
+<h2>=======Новый вызов функции создания узла=======</h2>
+
+<strong>BUFFER:</strong> 
+| (2 nil nil) ) )
+|
+
+<strong>SIZE:</strong> 11 
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+| (2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|(2 nil nil) ) )
+|
+
+<strong>Обнаружил скобку "("</strong>
+
+<strong>Пропустил скобку:</strong> 
+|2 nil nil) ) )
+|
+
+<strong>Пропускаю все пробельные символы</strong>
+
+<strong>До пропуска BUFFER:</strong> 
+|2 nil nil) ) )
+|
+
+<strong>После пропуска BUFFER:</strong> 
+|2 nil nil) ) )
 |
 
 <strong>Пытаюсь понять какой тип объекта:</strong>
 
 <strong>Посчитал длину числа LEN:</strong> 1
 
-<strong>Получил число NUM:</strong> |3.000000|
+<strong>Получил число NUM:</strong> |2.000000|
 
 <strong>Буфер после считывания числа</strong>
 <strong>BUFFER:</strong> | nil nil) ) )
 |
 
 <strong>Создал новую вершину</strong>
-<strong>NODE_PTR:</strong> 00000283c94fad70 
+<strong>NODE_PTR:</strong> 00000160d1ceaec0 
 <strong>TYPE:</strong> |NUM| 
-<strong>VALUE:</strong> |3.000000| 
+<strong>VALUE:</strong> |2.000000| 
 
-<strong>Увеличил размер SIZE:</strong> 8 
+<strong>Увеличил размер SIZE:</strong> 12 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
@@ -787,7 +1616,7 @@
 | nil nil) ) )
 |
 
-<strong>SIZE:</strong> 8 
+<strong>SIZE:</strong> 12 
 
 <strong>Пропускаю все пробельные символы</strong>
 
@@ -816,7 +1645,7 @@
 |
 
 <strong>Завершил левый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fad70 
+<strong>У этого узла:</strong> 00000160d1ceaec0 
 
 <h2>=======Новый вызов функции создания узла=======</h2>
 
@@ -824,7 +1653,7 @@
 |nil) ) )
 |
 
-<strong>SIZE:</strong> 8 
+<strong>SIZE:</strong> 12 
 
 <strong>Пропускаю все пробельные символы</strong>
 
@@ -853,7 +1682,7 @@
 |
 
 <strong>Завершил правый узел:</strong> 0000000000000000 
-<strong>У этого узла:</strong> 00000283c94fad70
+<strong>У этого узла:</strong> 00000160d1ceaec0
 
  <strong>Пропускаю все пробельные символы</strong>
 
@@ -869,10 +1698,10 @@
 | ) )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94fad70</strong> 
+<strong>Сейчас верну этот указатель 00000160d1ceaec0</strong> 
 
-<strong>Завершил правый узел:</strong> 00000283c94fad70 
-<strong>У этого узла:</strong> 00000283c94facf0
+<strong>Завершил правый узел:</strong> 00000160d1ceaec0 
+<strong>У этого узла:</strong> 00000160d1cead40
 
  <strong>Пропускаю все пробельные символы</strong>
 
@@ -888,10 +1717,10 @@
 | )
 |
 
-<strong>Сейчас верну этот указатель 00000283c94facf0</strong> 
+<strong>Сейчас верну этот указатель 00000160d1cead40</strong> 
 
-<strong>Завершил правый узел:</strong> 00000283c94facf0 
-<strong>У этого узла:</strong> 00000283c7eb62f0
+<strong>Завершил правый узел:</strong> 00000160d1cead40 
+<strong>У этого узла:</strong> 00000160d05162f0
 
  <strong>Пропускаю все пробельные символы</strong>
 
@@ -907,58 +1736,58 @@
 |
 |
 
-<strong>Сейчас верну этот указатель 00000283c7eb62f0</strong> 
+<strong>Сейчас верну этот указатель 00000160d05162f0</strong> 
 
-РћС€РёР±РєР° РІ РїРѕРґСЃС‡РµС‚Рµ Р»РѕРіР°СЂРёС„РјР°<h3>SIZE: 8
+<h3>SIZE: 12
 </h3>
 
 <img src=image0.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 50
+<h3>SIZE: 58
 </h3>
 
 <img src=image1.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 46
+<h3>SIZE: 54
 </h3>
 
 <img src=image2.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 42
+<h3>SIZE: 46
 </h3>
 
 <img src=image3.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 40
+<h3>SIZE: 44
 </h3>
 
 <img src=image4.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 40
+<h3>SIZE: 44
 </h3>
 
 <img src=image5.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 40
+<h3>SIZE: 44
 </h3>
 
 <img src=image6.svg width=2000px>
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-<h3>SIZE: 40
+<h3>SIZE: 44
 </h3>
 
 <img src=image7.svg width=2000px>

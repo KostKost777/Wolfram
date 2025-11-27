@@ -340,6 +340,14 @@ bool IsDoubleEqual(double num1, double num2)
     return abs(num1 - num2) < EPSILON;
 }
 
+bool IsDoubleBigger(double num1, double num2)
+{
+    assert(!isnan(num1));
+    assert(!isnan(num2));
+
+    return num1 - num2 > EPSILON;
+}
+
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 {
     Node* new_node = (Node*)calloc(1, sizeof(Node));

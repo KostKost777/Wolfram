@@ -1,4 +1,5 @@
 #include <TXLib.h>
+#include <math.h>
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
@@ -7,24 +8,26 @@
 
 StructOperation all_op[NUM_OF_OP] =
 {
-{"+",      ADD,     GetHash("+"),       BINARY,   ADD_func, ADD_diff_func},
-{"-",      SUB,     GetHash("-"),       BINARY,   SUB_func, SUB_diff_func},
-{"*",      MUL,     GetHash("*"),       BINARY,   MUL_func, MUL_diff_func},
-{"/",      DIV,     GetHash("/"),       BINARY,   DIV_func, DIV_diff_func},
-{"exp",    EXP,     GetHash("exp"),     UNARY,    EXP_func, EXP_diff_func},
-{"pow",    POW,     GetHash("pow"),     BINARY,   POW_func, POW_diff_func},
-{"ln",     LN,      GetHash("ln"),      UNARY,    LN_func,  LN_diff_func},
-{"log",    LOG,     GetHash("log"),     BINARY,   LOG_func, LOG_diff_func},
-{"cos",    COS,     GetHash("cos"),     UNARY,    COS_func, COS_diff_func},
-{"sin",    SIN,     GetHash("sin"),     UNARY,    SIN_func, SIN_diff_func},
-{"tg",     TG,      GetHash("tg"),      UNARY,    TG_func,     SIN_diff_func},
-{"ctg",    CTG,     GetHash("ctg"),     UNARY,    CTG_func,    SIN_diff_func},
-{"ch",     CH,      GetHash("ch"),      UNARY,    CH_func,     SIN_diff_func},
-{"sh",     SH,      GetHash("sh"),      UNARY,    SH_func,     SIN_diff_func},
-{"arcsin", ARCSIN,  GetHash("arcsin"),  UNARY,    ARCSIN_func, SIN_diff_func},
-{"arccos", ARCCOS,  GetHash("arccos"),  UNARY,    ARCCOS_func, SIN_diff_func},
-{"arctg",  ARCTG,   GetHash("arctg"),   UNARY,    ARCTG_func,  SIN_diff_func},
-{"arcctg", ARCCTG,  GetHash("arcctg"),  UNARY,    ARCCTG_func, SIN_diff_func},
+{"+",      ADD,     GetHash("+"),       BINARY,   ADD_func,    ADD_diff_func},
+{"-",      SUB,     GetHash("-"),       BINARY,   SUB_func,    SUB_diff_func},
+{"*",      MUL,     GetHash("*"),       BINARY,   MUL_func,    MUL_diff_func},
+{"/",      DIV,     GetHash("/"),       BINARY,   DIV_func,    DIV_diff_func},
+{"exp",    EXP,     GetHash("exp"),     UNARY,    EXP_func,    EXP_diff_func},
+{"pow",    POW,     GetHash("pow"),     BINARY,   POW_func,    POW_diff_func},
+{"ln",     LN,      GetHash("ln"),      UNARY,    LN_func,     LN_diff_func},
+{"log",    LOG,     GetHash("log"),     BINARY,   LOG_func,    LOG_diff_func},
+{"cos",    COS,     GetHash("cos"),     UNARY,    COS_func,    COS_diff_func},
+{"sin",    SIN,     GetHash("sin"),     UNARY,    SIN_func,    SIN_diff_func},
+{"tg",     TG,      GetHash("tg"),      UNARY,    TG_func,     TG_diff_func},
+{"ctg",    CTG,     GetHash("ctg"),     UNARY,    CTG_func,    CTG_diff_func},
+{"ch",     CH,      GetHash("ch"),      UNARY,    CH_func,     CH_diff_func},
+{"sh",     SH,      GetHash("sh"),      UNARY,    SH_func,     SH_diff_func},
+{"th",     TH,      GetHash("th"),      UNARY,    TH_func,     TH_diff_func},
+{"cth",    CTH,     GetHash("cth"),     UNARY,    CTH_func,    CTH_diff_func},
+{"arcsin", ARCSIN,  GetHash("arcsin"),  UNARY,    ARCSIN_func, ARCSIN_diff_func},
+{"arccos", ARCCOS,  GetHash("arccos"),  UNARY,    ARCCOS_func, ARCCOS_diff_func},
+{"arctg",  ARCTG,   GetHash("arctg"),   UNARY,    ARCTG_func,  ARCTG_diff_func},
+{"arcctg", ARCCTG,  GetHash("arcctg"),  UNARY,    ARCCTG_func, ARCCTG_diff_func},
 };
 
 double ADD_func(ArgsValue args_value)
@@ -91,6 +94,71 @@ double COS_func(ArgsValue args_value)
 double SIN_func(ArgsValue args_value)
 {
     return sin(args_value.num1);
+}
+
+double TG_func(ArgsValue args_value)
+{
+    return tan(args_value.num1);
+}
+
+double CTG_func(ArgsValue args_value)
+{
+    return 1.0 / tan(args_value.num1);
+}
+
+double SH_func(ArgsValue args_value)
+{
+    return sinh(args_value.num1);
+}
+
+double CH_func(ArgsValue args_value)
+{
+    return cosh(args_value.num1);
+}
+
+double TH_func(ArgsValue args_value)
+{
+    return tanh(args_value.num1);
+}
+
+double CTH_func(ArgsValue args_value)
+{
+    return 1.0 / tanh(args_value.num1);
+}
+
+double ARCSIN_func(ArgsValue args_value)
+{
+    if (   IsDoubleBigger(args_value.num1, 1)
+        || IsDoubleBigger(-1, args_value.num1))
+    {
+        fprintf(log_file, "ERROR arcsin\n\n");
+        return NAN;
+    }
+
+    return asin(args_value.num1);
+}
+
+double ARCCOS_func(ArgsValue args_value)
+{
+
+    if (   IsDoubleBigger(args_value.num1, 1)
+        && IsDoubleBigger(-1, args_value.num1))
+    {
+        fprintf(log_file, "ERROR arccos\n\n");
+        return NAN;
+    }
+
+        return acos(args_value.num1);
+}
+
+double ARCTG_func(ArgsValue args_value)
+{
+    return atan(args_value.num1);
+}
+
+double ARCCTG_func(ArgsValue args_value)
+{
+    return 1.0 / atan(args_value.num1);
 }
 
 //DIFF_FUNCS
@@ -205,4 +273,82 @@ Node* COS_diff_func(Tree* tree, Node* node)
     return RIGHT_COMP_FUNC_ ( MUL_ ( CNST_ (-1), SIN_ ( cR ) ) );
 }
 
+Node* TG_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
 
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), POW_ ( COS_ ( cR ), CNST_(2) ) ) );
+}
+
+Node* CTG_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (-1), POW_ ( SIN_ ( cR ), CNST_(2) ) ) );
+}
+
+Node* SH_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( CH_ ( cR ) );
+}
+
+Node* CH_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+   return RIGHT_COMP_FUNC_ ( SH_ ( cR ) );
+}
+
+Node* TH_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( CH_ ( cR ), CNST_ (2) ) ) );
+}
+
+Node* CTH_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+   return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SH_ ( cR ), CNST_ (2) ) ) );
+}
+
+Node* ARCSIN_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( SUB_ ( CNST_(1), POW_ (cR, CNST_ (2) ) ), CNST_ (0.5) ) ) );
+}
+
+Node* ARCCOS_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+   return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SUB_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ), CNST_ (0.5) ) ) );
+}
+
+Node* ARCTG_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) );
+}
+
+Node* ARCCTG_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) );
+}

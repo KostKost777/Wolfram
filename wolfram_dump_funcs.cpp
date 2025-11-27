@@ -195,6 +195,106 @@ void PrintTexTree(Node* node, FILE* tex_file)
                     fprintf(tex_file, "\\right)");
                     break;
 
+                case TG:
+                    fprintf(tex_file, "\\tan {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case CTG:
+                    fprintf(tex_file, "\\cot {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case SH:
+                    fprintf(tex_file, "\\sinh {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case CH:
+                    fprintf(tex_file, "\\cosh {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case TH:
+                    fprintf(tex_file, "\\tanh {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case CTH:
+                    fprintf(tex_file, "\\operatorname{coth} {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case ARCSIN:
+                    fprintf(tex_file, "\\arcsin {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case ARCCOS:
+                    fprintf(tex_file, "\\arccos {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case ARCTG:
+                    fprintf(tex_file, "\\arctan {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case ARCCTG:
+                    fprintf(tex_file, "\\operatorname{arccot} {");
+
+                    fprintf(tex_file, "\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+
+                    fprintf(tex_file, "}");
+                    break;
+
                 default: break;
             }
 

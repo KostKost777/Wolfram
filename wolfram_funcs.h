@@ -5,7 +5,7 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
-const int NUM_OF_OP = 10;
+const int NUM_OF_OP = 20;
 
 const double EPSILON = 10E-6;
 
@@ -35,7 +35,17 @@ enum Operation
     LN = 6,
     LOG = 7,
     COS = 8,
-    SIN = 9
+    SIN = 9,
+    TG = 10,
+    CTG = 11,
+    SH = 12,
+    CH = 13,
+    ARCSIN = 14,
+    ARCCOS = 15,
+    ARCTG = 16,
+    ARCCTG = 17,
+    TH = 18,
+    CTH = 19
 };
 
 struct Variable
@@ -108,6 +118,8 @@ Node* CopySubtree(Tree* tree, Node* node);
 
 bool IsDoubleEqual(double num1, double num2);
 
+bool IsDoubleBigger(double num1, double num2);
+
 Node* NewNumNode(double num, Node* left, Node* right, Tree* tree);
 
 Node* NewVarNode(Variable var, Node* left, Node* right, Tree* tree);
@@ -138,6 +150,16 @@ bool IsVarInTree(Node* node);
 #define LOG_(var1, var2) NewOpNode(LOG, var1, var2, tree)
 #define COS_(var)        NewOpNode(COS, NULL, var, tree)
 #define SIN_(var)        NewOpNode(SIN, NULL, var, tree)
+#define TG_(var)         NewOpNode(TG, NULL, var, tree)
+#define CTG_(var)        NewOpNode(CTG, NULL, var, tree)
+#define SH_(var)         NewOpNode(SH, NULL, var, tree)
+#define CH_(var)         NewOpNode(CH, NULL, var, tree)
+#define TH_(var)         NewOpNode(TH, NULL, var, tree)
+#define CTH_(var)        NewOpNode(CTH, NULL, var, tree)
+#define ARCCOS_(var)     NewOpNode(ARCCOS, NULL, var, tree)
+#define ARCSIN_(var)     NewOpNode(ARCSIN, NULL, var, tree)
+#define ARCTG_(var)      NewOpNode(ARCTG, NULL, var, tree)
+#define ARCCTG_(var)     NewOpNode(ARCCTG, NULL, var, tree)
 
 #define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
 #define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
