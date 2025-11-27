@@ -494,6 +494,22 @@ void FilesClosingProcessing()
     free(tex_cmd);
 }
 
+bool IsVarInTree(Node* node)
+{
+    if (node->type == VAR)
+        return true;
+
+    if (   node->left != NULL
+        && IsVarInTree(node->left))
+        return true;
+
+    if (   node->right != NULL
+        && IsVarInTree(node->right))
+        return true;
+
+    return false;
+}
+
 void FilesOpeningProcessing()
 {
     log_file = fopen(log_file_name, "w");

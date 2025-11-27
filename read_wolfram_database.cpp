@@ -228,7 +228,6 @@ bool IsOperation(char* name, size_t len)
             case '*':
             case '/':
             case '^':
-            case '%':
                 return true;
 
             default:
@@ -263,6 +262,8 @@ char* ReadVariable(char** cur_pos)
     return var_name;
 }
 
+
+
 Operation ReadOperation(char** cur_pos)
 {
     assert(cur_pos);
@@ -290,6 +291,7 @@ Operation ReadOperation(char** cur_pos)
         case '-': return SUB;
         case '*': return MUL;
         case '/': return DIV;
+        case '^'; return POW;
         default: break;
     }
 

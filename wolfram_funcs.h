@@ -5,7 +5,7 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
-const int NUM_OF_OP = 4;
+const int NUM_OF_OP = 8;
 
 const double EPSILON = 10E-6;
 
@@ -29,7 +29,11 @@ enum Operation
     ADD = 0,
     SUB = 1,
     MUL = 2,
-    DIV = 3
+    DIV = 3,
+    EXP = 4,
+    POW = 5,
+    LN = 6,
+    LOG = 7
 };
 
 struct Variable
@@ -114,14 +118,21 @@ Status NeutralElementOptimization(Node* node, Tree* tree);
 
 void RemoveNeutralElement(Tree* tree, Node* node_dad, Node* node_first_son);
 
+bool IsVarInTree(Node* node);
+
 #define dL               Defferentiate(tree, node->left)
 #define dR               Defferentiate(tree, node->right)
 #define cL               CopySubtree(tree, node->left)
 #define cR               CopySubtree(tree, node->right)
+
+#define CNST_(var)       NewNumNode(var, NULL, NULL, tree)
 #define ADD_(var1, var2) NewOpNode(ADD, var1, var2, tree)
 #define SUB_(var1, var2) NewOpNode(SUB, var1, var2, tree)
 #define MUL_(var1, var2) NewOpNode(MUL, var1, var2, tree)
 #define DIV_(var1, var2) NewOpNode(DIV, var1, var2, tree)
-#define COMPOUND_FUNC_(var1) NewOpNode(MUL, var1, dR, tree);
+#define POW_(var1, var2) NewOpNode(POW, var1, var2, tree)
+
+#define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
+#define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
 
 #endif

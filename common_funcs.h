@@ -5,13 +5,22 @@
 #include "wolfram_dump_funcs.h"
 #include "read_wolfram_database.h"
 
-typedef double (*op_func_ptr)(Tree* tree, Node* node);
+typedef double (*binary_op_func_ptr)(Tree* tree, Node* node);
+typedef double (*unary_op_func_ptr)(Tree* tree, Node* node);
+
 typedef Node* (*diff_op_func_ptr)(Tree* tree, Node* node);
+
+enum ArgType
+{
+    UNARY = 1,
+    BINARY = 2,
+};
 
 struct StructOperation {
     const char* name;
     Operation op;
     size_t hash;
+    ArgType args;
     const op_func_ptr op_func;
     const diff_op_func_ptr diff_op_func;
 };
