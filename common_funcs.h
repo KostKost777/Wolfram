@@ -7,12 +7,6 @@
 
 typedef Node* (*diff_op_func_ptr)(Tree* tree, Node* node);
 
-enum ArgType
-{
-    UNARY = 1,
-    BINARY = 2,
-};
-
 struct ArgsValue
 {
     double num1;

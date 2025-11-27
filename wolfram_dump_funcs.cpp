@@ -97,11 +97,23 @@ void PrintTexTree(Node* node, FILE* tex_file)
             switch(node->value.op)
             {
                 case ADD:
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->left, tex_file);
-                    fprintf(tex_file, " + ");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+
+                    if (   node->parent != NULL
+                        && node->parent->value.op != DIV)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->left, tex_file);
+                        fprintf(tex_file, " + ");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+
+                    else
+                    {
+                        PrintTexTree(node->left, tex_file);
+                        fprintf(tex_file, " + ");
+                        PrintTexTree(node->right, tex_file);
+                    }
                     break;
 
                 case MUL:
@@ -111,11 +123,21 @@ void PrintTexTree(Node* node, FILE* tex_file)
                     break;
 
                 case SUB:
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->left, tex_file);
-                    fprintf(tex_file, " - ");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (node->parent->value.op != DIV)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->left, tex_file);
+                        fprintf(tex_file, " - ");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+
+                    else
+                    {
+                        PrintTexTree(node->left, tex_file);
+                        fprintf(tex_file, " - ");
+                        PrintTexTree(node->right, tex_file);
+                    }
                     break;
 
                 case DIV:
@@ -130,11 +152,8 @@ void PrintTexTree(Node* node, FILE* tex_file)
 
                 case POW:
 
-                    if (   node->left->value.op == EXP
-                        || node->left->value.op == LN
-                        || node->left->value.op == SIN
-                        || node->left->value.op == COS
-                        || node->left->value.op == MUL)
+                    if (   GetArgsType(node->right) == UNARY
+                        || node->right->value.op == MUL)
                     {
                         fprintf(tex_file, "\\left(");
                         PrintTexTree(node->left, tex_file);
@@ -158,11 +177,7 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case LN:
                     fprintf(tex_file, "\\ln {");
 
-                    if (   node->right->value.op == EXP
-                        || node->right->value.op == LN
-                        || node->right->value.op == SIN
-                        || node->right->value.op == COS
-                        || node->right->value.op == MUL)
+                    if (GetArgsType(node->right) == UNARY)
                     {
                         fprintf(tex_file, "\\left(");
                         PrintTexTree(node->right, tex_file);
@@ -184,23 +199,46 @@ void PrintTexTree(Node* node, FILE* tex_file)
                     break;
 
                 case SIN:
-                    fprintf(tex_file, "\\sin\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    fprintf(tex_file, "\\sin {");
+
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
+
+                    fprintf(tex_file, "}");
                     break;
 
                 case COS:
-                    fprintf(tex_file, "\\cos\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    fprintf(tex_file, "\\cos {");
+
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
+
+                    fprintf(tex_file, "}");
                     break;
 
                 case TG:
                     fprintf(tex_file, "\\tan {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -208,9 +246,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case CTG:
                     fprintf(tex_file, "\\cot {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -218,9 +261,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case SH:
                     fprintf(tex_file, "\\sinh {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -228,9 +276,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case CH:
                     fprintf(tex_file, "\\cosh {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -238,19 +291,30 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case TH:
                     fprintf(tex_file, "\\tanh {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
 
                 case CTH:
-                    fprintf(tex_file, "\\operatorname{coth} {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    fprintf(tex_file, "\\coth {");
+
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -258,9 +322,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case ARCSIN:
                     fprintf(tex_file, "\\arcsin {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -268,9 +337,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case ARCCOS:
                     fprintf(tex_file, "\\arccos {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -278,19 +352,29 @@ void PrintTexTree(Node* node, FILE* tex_file)
                 case ARCTG:
                     fprintf(tex_file, "\\arctan {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
 
                 case ARCCTG:
-                    fprintf(tex_file, "\\operatorname{arccot} {");
+                    fprintf(tex_file, "\\arccot {");
 
-                    fprintf(tex_file, "\\left(");
-                    PrintTexTree(node->right, tex_file);
-                    fprintf(tex_file, "\\right)");
+                    if (GetArgsType(node->right) == UNARY)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
 
                     fprintf(tex_file, "}");
                     break;
@@ -403,15 +487,19 @@ void PrintGraphizNode(FILE* graphiz_file,  Node* node)
             "fillcolor = \"#8ABAD3\", "
             "color = \"#00000\", "
             "label = \" {PARANT_PTR: %p| PTR: %p | "
-            "TYPE: %s | ",
+            "TYPE: %s",
             node, node->parent, node, GetNodeTypeName(node));
 
+    if (node->type == OP)
+        fprintf(graphiz_file, "| ARGS: %d",
+                              node->args);
+
     if (node->type == NUM)
-        fprintf(graphiz_file, "VALUE: %lf",
+        fprintf(graphiz_file, "| VALUE: %lf",
                               node->value.num);
 
     else
-        fprintf(graphiz_file, "VALUE: %s",
+        fprintf(graphiz_file, "| VALUE: %s",
                               GetNodeValueName(node));
 
     if (node->left != NULL && node->right != NULL)

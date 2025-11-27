@@ -24,6 +24,12 @@ enum Type
     NUM = 2,
 };
 
+enum ArgType
+{
+    UNARY = 1,
+    BINARY = 2,
+};
+
 enum Operation
 {
     ADD = 0,
@@ -64,6 +70,7 @@ union Value
 
 struct Node
 {
+    ArgType args;
     Type type;
     Value value;
 
@@ -82,6 +89,7 @@ struct Tree
 {
     size_t size;
     int code_err;
+
     VariableArr* var;
     Node* root;
 };
@@ -115,6 +123,10 @@ Tree StartDefferentiating(Tree* tree);
 Node* Defferentiate(Tree* tree, Node* node);
 
 Node* CopySubtree(Tree* tree, Node* node);
+
+ArgType GetArgsType(Node* node);
+
+void DefineAndSetArgType(Node* node);
 
 bool IsDoubleEqual(double num1, double num2);
 

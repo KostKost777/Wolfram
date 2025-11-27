@@ -348,6 +348,30 @@ bool IsDoubleBigger(double num1, double num2)
     return num1 - num2 > EPSILON;
 }
 
+ArgType GetArgsType(Node* node)
+{
+    assert(node);
+
+    for (int i = 0; i < NUM_OF_OP; ++i)
+    {
+        if (all_op[i].op == node->value.op)
+            return all_op[i].args;
+    }
+
+    return UNARY;
+}
+
+void DefineAndSetArgType(Node* node)
+{
+    assert(node);
+
+    for (int i = 0; i < NUM_OF_OP; ++i)
+    {
+        if (all_op[i].op == node->value.op)
+            node->args = all_op[i].args;
+    }
+}
+
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 {
     Node* new_node = (Node*)calloc(1, sizeof(Node));
@@ -358,6 +382,11 @@ Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 
     if (left) left->parent = new_node;
     if (right) right->parent = new_node;
+
+    if (left == NULL || right == NULL)
+        new_node->args = UNARY;
+    else
+        new_node->args = BINARY;
 
     new_node->type = OP;
     new_node->value.op = op;

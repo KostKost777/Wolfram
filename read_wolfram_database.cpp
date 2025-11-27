@@ -88,6 +88,8 @@ Node* FillNodeDataFromBuffer(char** cur_pos, Tree* tree, Node* parent)
             case OP:
                 node->type = OP;
                 node->value.op = ReadOperation(cur_pos);
+                DefineAndSetArgType(node);
+
                 break;
 
             case NUM:
