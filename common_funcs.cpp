@@ -7,146 +7,90 @@
 
 StructOperation all_op[NUM_OF_OP] =
 {
-{"+",   ADD, GetHash("+"),   BINARY,   ADD_func, ADD_diff_func},
-{"-",   SUB, GetHash("-"),   BINARY,   SUB_func, SUB_diff_func},
-{"*",   MUL, GetHash("*"),   BINARY,   MUL_func, MUL_diff_func},
-{"/",   DIV, GetHash("/"),   BINARY,   DIV_func, DIV_diff_func},
-{"exp", EXP, GetHash("exp"), UNARY,  EXP_func, EXP_diff_func},
-{"pow", POW, GetHash("pow"), BINARY, POW_func, POV_diff_func},
-{"ln",  LN,  GetHash("ln"),  UNARY,  LN_func,  LN_diff_func},
-{"log", LOG, GetHash("log"), BINARY, LOG_func, LOG_diff_func},
+{"+",      ADD,     GetHash("+"),       BINARY,   ADD_func, ADD_diff_func},
+{"-",      SUB,     GetHash("-"),       BINARY,   SUB_func, SUB_diff_func},
+{"*",      MUL,     GetHash("*"),       BINARY,   MUL_func, MUL_diff_func},
+{"/",      DIV,     GetHash("/"),       BINARY,   DIV_func, DIV_diff_func},
+{"exp",    EXP,     GetHash("exp"),     UNARY,    EXP_func, EXP_diff_func},
+{"pow",    POW,     GetHash("pow"),     BINARY,   POW_func, POW_diff_func},
+{"ln",     LN,      GetHash("ln"),      UNARY,    LN_func,  LN_diff_func},
+{"log",    LOG,     GetHash("log"),     BINARY,   LOG_func, LOG_diff_func},
+{"cos",    COS,     GetHash("cos"),     UNARY,    COS_func, COS_diff_func},
+{"sin",    SIN,     GetHash("sin"),     UNARY,    SIN_func, SIN_diff_func},
+{"tg",     TG,      GetHash("tg"),      UNARY,    TG_func,     SIN_diff_func},
+{"ctg",    CTG,     GetHash("ctg"),     UNARY,    CTG_func,    SIN_diff_func},
+{"ch",     CH,      GetHash("ch"),      UNARY,    CH_func,     SIN_diff_func},
+{"sh",     SH,      GetHash("sh"),      UNARY,    SH_func,     SIN_diff_func},
+{"arcsin", ARCSIN,  GetHash("arcsin"),  UNARY,    ARCSIN_func, SIN_diff_func},
+{"arccos", ARCCOS,  GetHash("arccos"),  UNARY,    ARCCOS_func, SIN_diff_func},
+{"arctg",  ARCTG,   GetHash("arctg"),   UNARY,    ARCTG_func,  SIN_diff_func},
+{"arcctg", ARCCTG,  GetHash("arcctg"),  UNARY,    ARCCTG_func, SIN_diff_func},
 };
 
-double ADD_func(Tree* tree, Node* node)
+double ADD_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->left);
-    assert(node->right);
-
-    double left_result = CalculateExpression(tree, node->left);
-    double right_result = CalculateExpression(tree, node->right);
-
-    return left_result + right_result;
+    return args_value.num1 + args_value.num2;
 }
 
-double POW_func(Tree* tree, Node* node)
+double SUB_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->left);
-    assert(node->right);
-
-    double left_result = CalculateExpression(tree, node->left);
-    double right_result = CalculateExpression(tree, node->right);
-
-    return pow(left_result, right_result);
+    return args_value.num1 - args_value.num2;
 }
 
-double SUB_func(Tree* tree, Node* node)
+double MUL_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->left);
-    assert(node->right);
-
-    double left_result = CalculateExpression(tree, node->left);
-    double right_result = CalculateExpression(tree, node->right);
-
-    return left_result - right_result;
+    return args_value.num1 * args_value.num2;
 }
 
-double MUL_func(Tree* tree, Node* node)
+double DIV_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->left);
-    assert(node->right);
 
-    double left_result = CalculateExpression(tree, node->left);
-    double right_result = CalculateExpression(tree, node->right);
-
-    return left_result * right_result;
-}
-
-double DIV_func(Tree* tree, Node* node)
-{
-    assert(node);
-    assert(tree);
-    assert(node->left);
-    assert(node->right);
-
-    double left_result = CalculateExpression(tree, node->left);
-    double right_result = CalculateExpression(tree, node->right);
-
-    if (!IsDoubleEqual(right_result, 0))
-        return left_result / right_result;
+    if (!IsDoubleEqual(args_value.num2, 0))
+        return args_value.num1 / args_value.num2;
     else
         fprintf(log_file, "Деление на ноль\n");
 
     return NAN;
 }
 
-double EXP_func(Tree* tree, Node* node)
+double EXP_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->right);
-
-    double right_result = CalculateExpression(tree, node->right);
-
-    return exp(right_result);
+    return exp(args_value.num1);
 }
 
-double POW_func(Tree* tree, Node* node)
+double POW_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->right);
-    assert(node->left)
-
-    double right_result = CalculateExpression(tree, node->right);
-    double left_result = CalculateExpression(tree, node->left);
-
-    return pow(left_result, right_result);
+    return pow(args_value.num1, args_value.num2);
 }
 
-double LN_func(Tree* tree, Node* node)
+double LN_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->right);
 
-    double right_result = CalculateExpression(tree, node->right);
-
-    if (signbit(right_result))
-    {
-        fprintf(log_file, "Ошибка в подсчете натурального логарифма");
-        return NAN;
-    }
-
-    return log(right_result);
+    return log(args_value.num1);
 }
 
-double LOG_func(Tree* tree, Node* node)
+double LOG_func(ArgsValue args_value)
 {
-    assert(node);
-    assert(tree);
-    assert(node->right);
-    assert(node->left)
 
-    double right_result = CalculateExpression(tree, node->right);
-    double left_result = CalculateExpression(tree, node->left);
-
-    if (   signbit(right_result)
-        || signbit(left_result)
-        || IsDoubleEqual(left_result, 1))
+    if (   signbit(args_value.num1)
+        || signbit(args_value.num2)
+        || IsDoubleEqual(args_value.num1, 1))
     {
         fprintf(log_file, "Ошибка в подсчете логарифма");
         return NAN;
     }
 
-    return log(right_result) / log(left_result);
+    return log(args_value.num1) / log(args_value.num2);
+}
+
+double COS_func(ArgsValue args_value)
+{
+    return cos(args_value.num1);
+}
+
+double SIN_func(ArgsValue args_value)
+{
+    return sin(args_value.num1);
 }
 
 //DIFF_FUNCS
@@ -195,7 +139,7 @@ Node* POW_diff_func(Tree* tree, Node* node)
 
     else if (IsVarInTree(node->left) && !IsVarInTree(node->right))
     {
-        return LEFT_COMP_FUNC_ ( MUL_ ( cR, ( POW_ ( cL, SUB_ ( cR, 1 ) ) ) ) );
+        return LEFT_COMP_FUNC_ ( MUL_ ( cR, ( POW_ ( cL, SUB_ ( cR, CNST_ (1) ) ) ) ) );
     }
 
     else if (!IsVarInTree(node->left) && IsVarInTree(node->right))
@@ -219,7 +163,7 @@ Node* LN_diff_func(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ ( 1 ), cR));
+    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), cR));
 }
 
 Node* LOG_diff_func(Tree* tree, Node* node)
@@ -234,7 +178,7 @@ Node* LOG_diff_func(Tree* tree, Node* node)
 
     else if (IsVarInTree(node->left) && !IsVarInTree(node->right))
     {
-        return LEFT_COMP_FUNC_ MUL_ ( ( CNST_ (-1), DIV_ ( LN_ ( cR ), MUL_ ( cL, POW_ ( LN_ ( cL ), CNST_ (2) ) ) ) ) );
+        return LEFT_COMP_FUNC_ ( MUL_  ( CNST_ (-1), DIV_ ( LN_ ( cR ), MUL_ ( cL, POW_ ( LN_ ( cL ), CNST_ (2) ) ) ) ) );
     }
 
     else if (!IsVarInTree(node->left) && IsVarInTree(node->right))
@@ -243,6 +187,22 @@ Node* LOG_diff_func(Tree* tree, Node* node)
     }
 
     return CNST_ (0);
+}
+
+Node* SIN_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( COS_ ( cR ) );
+}
+
+Node* COS_diff_func(Tree* tree, Node* node)
+{
+    assert(node);
+    assert(tree);
+
+    return RIGHT_COMP_FUNC_ ( MUL_ ( CNST_ (-1), SIN_ ( cR ) ) );
 }
 
 

@@ -127,6 +127,7 @@ Status NeutralElementOptimization(Node* node, Tree* tree)
 
     if (node->type == OP)
     {
+        //ADD, SUB
         if (node->value.op == ADD || node->value.op == SUB)
         {
             if (   node->right->type == NUM
@@ -146,6 +147,7 @@ Status NeutralElementOptimization(Node* node, Tree* tree)
             }
         }
 
+        //MUL, DIV
         if (node->value.op == MUL || node->value.op == DIV)
         {
             if (   (node->right->type == NUM && IsDoubleEqual(node->right->value.num, 0))
@@ -157,7 +159,7 @@ Status NeutralElementOptimization(Node* node, Tree* tree)
                 node->value.num = 0;
             }
 
-            if (   node->right->type == NUM
+            else if (   node->right->type == NUM
                 && IsDoubleEqual(node->right->value.num, 1))
             {
                 NeutralElementOptimization(node->left, tree);
@@ -166,11 +168,46 @@ Status NeutralElementOptimization(Node* node, Tree* tree)
             }
 
             else if (   node->left->type == NUM
+                     && node->left->value.op == MUL
                      && IsDoubleEqual(node->left->value.num, 1))
             {
                 NeutralElementOptimization(node->right, tree);
 
                 RemoveNeutralElement(tree, node, node->left);
+            }
+        }
+
+        //LOG
+        if (node->value.op == LOG)
+        {
+            if (   node->right->type == NUM
+                && IsDoubleEqual(node->right->value.num, 1))
+            {
+                DeleteNode(tree, node);
+
+                node->type = NUM;
+                node->value.num = 0;
+            }
+        }
+
+        //POW
+        if (node->value.op == POW || node->value.op == EXP)
+        {
+            if (   node->right->type == NUM
+                && IsDoubleEqual(node->right->value.num, 0))
+            {
+                DeleteNode(tree, node);
+
+                node->type = NUM;
+                node->value.num = 1;
+            }
+
+            else if (   node->right->type == NUM
+                     && IsDoubleEqual(node->right->value.num, 1))
+            {
+                NeutralElementOptimization(node->left, tree);
+
+                RemoveNeutralElement(tree, node, node->right);
             }
         }
     }
@@ -202,51 +239,61 @@ double ConstantsOptimization(Node* node, Tree* tree)
             return NAN;
 
         case OP:
-            left_res = ConstantsOptimization(node->left, tree);
-            right_res = ConstantsOptimization(node->right, tree);
 
-            if (!isnan(left_res) && !isnan(right_res))
+            for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
-                free(node->left);
-                free(node->right);
-
-                node->left = NULL;
-                node->right = NULL;
-
-                tree->size -= 2;
-
-                double new_num_node_value = 0;
-
-                switch(node->value.op)
+                if (all_op[i].op == node->value.op)
                 {
-                    case ADD: new_num_node_value = left_res + right_res;
-                              break;
+                    switch(all_op[i].args)
+                    {
+                        case UNARY:
 
-                    case SUB: new_num_node_value = left_res - right_res;
-                              break;
+                            right_res = ConstantsOptimization(node->right,
+                                                              tree);
+                            if (!isnan(right_res))
+                            {
+                                free(node->right);
+                                node->right = NULL;
 
+                                tree->size -= 1;
+                                node->type = NUM;
 
-                    case MUL: new_num_node_value = left_res * right_res;
-                              break;
+                                ArgsValue args_value = {right_res, 0};
 
-                    case DIV:
+                                node->value.num = all_op[i].op_func(args_value);
+                            }
 
-                        if (!IsDoubleEqual(right_res, 0))
-                            new_num_node_value = left_res / right_res;
+                            break;
 
-                        else
-                        {
-                            fprintf(log_file, "Деление на ноль\n");
-                            new_num_node_value = NAN;
-                        }
+                        case BINARY:
 
-                        break;
+                            left_res = ConstantsOptimization(node->left,
+                                                             tree);
 
-                    default: break;
+                            right_res = ConstantsOptimization(node->right,
+                                                              tree);
+
+                            if (!isnan(left_res) && !isnan(right_res))
+                            {
+                                free(node->left);
+                                free(node->right);
+
+                                node->left = NULL;
+                                node->right = NULL;
+
+                                tree->size -= 2;
+
+                                ArgsValue args_value = {left_res, right_res};
+
+                                node->type = NUM;
+                                node->value.num = all_op[i].op_func(args_value);
+                            }
+
+                            break;
+
+                        default: break;
+                    }
                 }
-
-                node->type = NUM;
-                node->value.num = new_num_node_value;
             }
 
         default: break;
@@ -267,8 +314,12 @@ void RemoveNeutralElement(Tree* tree, Node* node_dad, Node* node_first_son)
     else
         node_second_son = node_dad->right;
 
-    if (node_dad->parent->left == node_dad)
+    if (node_dad->parent == NULL)
+        tree->root = node_second_son;
+
+    else if (node_dad->parent->left == node_dad)
         node_dad->parent->left = node_second_son;
+
     else
         node_dad->parent->right = node_second_son;
 
@@ -365,6 +416,9 @@ double CalculateExpression(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
+    double right_res = 0;
+    double left_res = 0;
+
     switch(node->type)
     {
         case NUM:
@@ -375,12 +429,37 @@ double CalculateExpression(Tree* tree, Node* node)
             return GetVariableValue(tree, node->value.var.var_name);
 
         case OP:
-
-            //printf("RET OP: LEFT: %lf  RIGHT %lf\n", left_result, right_result);
             for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
                 if (all_op[i].op == node->value.op)
-                    return all_op[i].op_func(tree, node);
+                {
+                    ArgsValue args_value = {};
+
+                    switch(all_op[i].args)
+                    {
+                        case UNARY:
+
+                            right_res = CalculateExpression(tree,
+                                                            node->right);
+
+                            args_value.num1 = right_res;
+
+                            return all_op[i].op_func(args_value);
+
+                        case BINARY:
+
+                            left_res = CalculateExpression(tree, node->left);
+
+                            right_res = CalculateExpression(tree, node->right);
+
+                            args_value.num1 = left_res;
+                            args_value.num2 = right_res;
+
+                            return all_op[i].op_func(args_value);
+
+                        default: break;
+                    }
+                }
             }
 
         default: break;
@@ -415,7 +494,7 @@ Node* NodeCtor(Node* parent)
     return new_node;
 }
 
-size_t GetHash(char* str)
+size_t GetHash(const char* str)
 {
     size_t hash = 5381;
     int c = 0;

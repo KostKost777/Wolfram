@@ -5,7 +5,7 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
-const int NUM_OF_OP = 8;
+const int NUM_OF_OP = 10;
 
 const double EPSILON = 10E-6;
 
@@ -21,7 +21,7 @@ enum Type
 {
     OP = 0,
     VAR = 1,
-    NUM = 2
+    NUM = 2,
 };
 
 enum Operation
@@ -33,7 +33,9 @@ enum Operation
     EXP = 4,
     POW = 5,
     LN = 6,
-    LOG = 7
+    LOG = 7,
+    COS = 8,
+    SIN = 9
 };
 
 struct Variable
@@ -82,7 +84,7 @@ void FilesClosingProcessing();
 
 void FilesOpeningProcessing();
 
-size_t GetHash(char* str);
+size_t GetHash(const char* str);
 
 bool IsEqualHash(size_t hash1, size_t hash2);
 
@@ -131,8 +133,13 @@ bool IsVarInTree(Node* node);
 #define MUL_(var1, var2) NewOpNode(MUL, var1, var2, tree)
 #define DIV_(var1, var2) NewOpNode(DIV, var1, var2, tree)
 #define POW_(var1, var2) NewOpNode(POW, var1, var2, tree)
+#define EXP_(var)        NewOpNode(EXP, NULL, var, tree)
+#define LN_(var)         NewOpNode(LN, NULL, var, tree)
+#define LOG_(var1, var2) NewOpNode(LOG, var1, var2, tree)
+#define COS_(var)        NewOpNode(COS, NULL, var, tree)
+#define SIN_(var)        NewOpNode(SIN, NULL, var, tree)
 
-#define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
 #define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
+#define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
 
 #endif

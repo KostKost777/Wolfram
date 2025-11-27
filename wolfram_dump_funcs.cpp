@@ -86,7 +86,7 @@ void PrintTexTree(Node* node, FILE* tex_file)
     switch(node->type)
     {
         case NUM:
-            fprintf(tex_file, "%.2lf", node->value.num);
+            fprintf(tex_file, "%g", node->value.num);
             break;
 
         case VAR:
@@ -94,13 +94,14 @@ void PrintTexTree(Node* node, FILE* tex_file)
             break;
 
         case OP:
-            fprintf(tex_file, "\\left(");
             switch(node->value.op)
             {
                 case ADD:
+                    fprintf(tex_file, "\\left(");
                     PrintTexTree(node->left, tex_file);
                     fprintf(tex_file, " + ");
                     PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
                     break;
 
                 case MUL:
@@ -110,9 +111,11 @@ void PrintTexTree(Node* node, FILE* tex_file)
                     break;
 
                 case SUB:
+                    fprintf(tex_file, "\\left(");
                     PrintTexTree(node->left, tex_file);
                     fprintf(tex_file, " - ");
                     PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
                     break;
 
                 case DIV:
@@ -123,12 +126,77 @@ void PrintTexTree(Node* node, FILE* tex_file)
                     fprintf(tex_file, "{");
                     PrintTexTree(node->right, tex_file);
                     fprintf(tex_file, "}");
+                    break;
 
+                case POW:
+
+                    if (   node->left->value.op == EXP
+                        || node->left->value.op == LN
+                        || node->left->value.op == SIN
+                        || node->left->value.op == COS
+                        || node->left->value.op == MUL)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->left, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+
+                    else
+                        PrintTexTree(node->left, tex_file);
+
+                    fprintf(tex_file, " ^ {");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "}");
+                    break;
+
+                case EXP:
+                    fprintf(tex_file, "e ^ {");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "}");
+                    break;
+
+                case LN:
+                    fprintf(tex_file, "\\ln {");
+
+                    if (   node->right->value.op == EXP
+                        || node->right->value.op == LN
+                        || node->right->value.op == SIN
+                        || node->right->value.op == COS
+                        || node->right->value.op == MUL)
+                    {
+                        fprintf(tex_file, "\\left(");
+                        PrintTexTree(node->right, tex_file);
+                        fprintf(tex_file, "\\right)");
+                    }
+                    else
+                        PrintTexTree(node->right, tex_file);
+
+                    fprintf(tex_file, "}");
+                    break;
+
+                case LOG:
+                    fprintf(tex_file, "\\log_{");
+                    PrintTexTree(node->left, tex_file);
+                    fprintf(tex_file, "}");
+
+                    fprintf(tex_file, " ");
+                    PrintTexTree(node->right, tex_file);
+                    break;
+
+                case SIN:
+                    fprintf(tex_file, "\\sin\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
+                    break;
+
+                case COS:
+                    fprintf(tex_file, "\\cos\\left(");
+                    PrintTexTree(node->right, tex_file);
+                    fprintf(tex_file, "\\right)");
                     break;
 
                 default: break;
             }
-            fprintf(tex_file, "\\right)");
 
         default: break;
     }
@@ -158,13 +226,16 @@ void PrintGraphizEdge(FILE* graphiz_file,  Node* node)
     assert(node);
     assert(graphiz_file);
 
-    if (node->left != NULL && node->right != NULL)
+    if (node->left != NULL)
     {
         fprintf(graphiz_file,
                 "node%p -> node%p "
                 "[dir = both tailport=sw]\n",
                 node, node->left);
+    }
 
+    if (node->right != NULL)
+    {
         fprintf(graphiz_file,
                 "node%p -> node%p "
                 "[dir = both tailport=se]\n",

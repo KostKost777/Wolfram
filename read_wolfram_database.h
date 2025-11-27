@@ -30,7 +30,7 @@ char* ReadVariable(char** cur_pos);
 
 Type DefineNewNodeType(char* cur_pos);
 
-bool IsOperation(char* name, size_t len);
+bool IsOperation(char* name);
 
 void UpdateVarArray(Tree* tree, Variable new_var);
 

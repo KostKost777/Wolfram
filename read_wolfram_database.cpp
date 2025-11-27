@@ -196,43 +196,30 @@ Type DefineNewNodeType(char* cur_pos)
     size_t obj_len = 0;
 
     int status = sscanf(cur_pos, "%lf%llu", &new_num, &obj_len);
+
     if (status != 0)
         return NUM;
 
     sscanf(cur_pos, "%s", obj_name);
-    fprintf(log_file, "<strong>Прочитал такой объект: </strong> %s\n", obj_name);
+    fprintf(log_file, "<strong>Прочитал такой объект: </strong> |%s|\n", obj_name);
 
     obj_len = strlen(obj_name);
     fprintf(log_file, "<strong>Его длина: </strong> %llu\n", obj_len);
 
-    if (IsOperation(obj_name, obj_len))
+    if (IsOperation(obj_name))
         return OP;
 
     return VAR;
 }
 
-bool IsOperation(char* name, size_t len)
+bool IsOperation(char* name)
 {
     assert(name);
 
-    if (strcmp(name, "sin") == 0 ||
-        strcmp(name, "cos") == 0)
-        return true;
-
-    if (len == 1)
+    for (size_t i = 0; i < NUM_OF_OP; ++i)
     {
-        switch(name[0])
-        {
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-            case '^':
-                return true;
-
-            default:
-                return false;
-        }
+        if (strcmp(all_op[i].name, name) == 0)
+            return true;
     }
 
     return false;
@@ -262,8 +249,6 @@ char* ReadVariable(char** cur_pos)
     return var_name;
 }
 
-
-
 Operation ReadOperation(char** cur_pos)
 {
     assert(cur_pos);
@@ -285,17 +270,13 @@ Operation ReadOperation(char** cur_pos)
     fprintf(log_file, "<strong>Буфер после считывания операции</strong>\n"
                       "<strong>BUFFER:</strong> |%s|\n\n", *cur_pos);
 
-    switch(op_name[0])
+    for (size_t i = 0; i < NUM_OF_OP; ++i)
     {
-        case '+': return ADD;
-        case '-': return SUB;
-        case '*': return MUL;
-        case '/': return DIV;
-        case '^'; return POW;
-        default: break;
+        if (strcmp(all_op[i].name, op_name) == 0)
+            return all_op[i].op;
     }
 
-    return ADD;
+    return ADD; //DODELAT EPTA
 }
 
 double ReadNumber(char** cur_pos)
