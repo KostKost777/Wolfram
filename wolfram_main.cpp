@@ -15,6 +15,9 @@ int main(int argc, const char* argv[])
         database_file_name = argv[1];
 
     FilesOpeningProcessing();
+    SetAllOpHash();
+
+    qsort(all_op, NUM_OF_OP, sizeof(StructOperation), OpHashComparator);
 
     Buffer buffer = {};
     GetDataBaseFromFile(&buffer, database_file_name);

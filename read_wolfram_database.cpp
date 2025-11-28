@@ -349,3 +349,38 @@ int GetSizeOfFile(const char* filename)
 
     return (int)file_info.st_size;
 }
+
+int OpHashComparator(const void* param1, const void* param2)
+{
+    assert(param1 != NULL);
+    assert(param2 != NULL);
+
+    const StructOperation* op_1 = (const StructOperation*)param1;
+    const StructOperation* op_2 = (const StructOperation*)param2;
+
+    printf("NAME1: %s HASH1: %llu\n", op_1->name, op_1->hash);
+    printf("NAME2: %s HASH2: %llu\n\n", op_2->name, op_2->hash);
+
+    if (op_1->hash < op_2->hash) return -1;
+
+    else if (op_1->hash == op_2->hash) return 0;
+
+    return 1;
+}
+//
+// int BinSearchCompForOpHash(const void* param1, const void* param2)
+// {
+//     assert(param1 != NULL);
+//     assert(param2 != NULL);
+//
+//     const size_t* value = (const size_t* )param1;
+//     const StructOperation* op = (const StructOperation*)param2;
+//
+//     if (*value < op->hash) return -1;
+//
+//     else if (*value == op->hash) return 0;
+//
+//     return 1;
+// }
+
+

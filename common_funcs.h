@@ -25,6 +25,8 @@ struct StructOperation
     const diff_op_func_ptr diff_op_func;
 };
 
+void SetAllOpHash();
+
 extern StructOperation all_op[NUM_OF_OP];
 
 //OP_FUNCS

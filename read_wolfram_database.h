@@ -34,4 +34,8 @@ bool IsOperation(char* name);
 
 void UpdateVarArray(Tree* tree, Variable new_var);
 
+int OpHashComparator(const void* param1, const void* param2);
+
+// int BinSearchCompForOpHash(const void* param1, const void* param2);
+
 #endif

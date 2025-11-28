@@ -224,11 +224,14 @@ Status NeutralElementOptimization(Node* node, Tree* tree)
 
 double ConstantsOptimization(Node* node, Tree* tree)
 {
+    //printf("PTR: %p\n", node);
     assert(tree);
     assert(node);
 
     double left_res = 0;
     double right_res = 0;
+
+    //printf("ENUM: %d\n", node->type);
 
     switch(node->type)
     {
