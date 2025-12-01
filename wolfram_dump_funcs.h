@@ -14,7 +14,9 @@ void PrintTree(Node* node, FILE* graphiz_file);
 
 void TreeDump(Tree* tree);
 
-void PrintTexTree(Node* node, FILE* tex_file);
+Node* PrintTexTree(Node* node);
+
+void PrintTexNode(Node* node, FILE* tex_file);
 
 void PrintGraphizNode(FILE* graphiz_file, Node* node);
 

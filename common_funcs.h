@@ -3,7 +3,7 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
-#include "read_wolfram_database.h"
+#include "new_read_wolfram_database.h"
 
 typedef Node* (*diff_op_func_ptr)(Tree* tree, Node* node);
 

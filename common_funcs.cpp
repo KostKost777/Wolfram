@@ -3,7 +3,7 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
-#include "read_wolfram_database.h"
+#include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 
 StructOperation all_op[NUM_OF_OP] =
@@ -174,7 +174,7 @@ Node* ADD_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return ADD_ ( dL, dR );
+    return  DUMP_ ( ADD_ ( dL, dR ) );
 }
 
 Node* SUB_diff_func(Tree* tree, Node* node)
@@ -182,7 +182,7 @@ Node* SUB_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return SUB_ ( dL, dR );
+    return  DUMP_ (SUB_ ( dL, dR ) );
 }
 
 Node* MUL_diff_func(Tree* tree, Node* node)
@@ -190,7 +190,7 @@ Node* MUL_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return ADD_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) );
+    return  DUMP_ ( ADD_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ) );
 }
 
 Node* DIV_diff_func(Tree* tree, Node* node)
@@ -198,7 +198,7 @@ Node* DIV_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return DIV_ ( SUB_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ), MUL_ ( cR, cR ) );
+    return  DUMP_ ( DIV_ ( SUB_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ), MUL_ ( cR, cR ) ) );
 }
 
 Node* POW_diff_func(Tree* tree, Node* node)
@@ -208,17 +208,17 @@ Node* POW_diff_func(Tree* tree, Node* node)
 
     if (IsVarInTree(node->left) && IsVarInTree(node->right))
     {
-        return MUL_ ( POW_ ( cL, cR ), ADD_ ( DIV_ (MUL_ ( dL , cR ), cL ), MUL_ ( dR, LN_ ( cL ) ) ) );
+        return  DUMP_ ( MUL_ ( POW_ ( cL, cR ), ADD_ ( DIV_ (MUL_ ( dL , cR ), cL ), MUL_ ( dR, LN_ ( cL ) ) ) ) );
     }
 
     else if (IsVarInTree(node->left) && !IsVarInTree(node->right))
     {
-        return LEFT_COMP_FUNC_ ( MUL_ ( cR, ( POW_ ( cL, SUB_ ( cR, CNST_ (1) ) ) ) ) );
+        return  DUMP_ ( LEFT_COMP_FUNC_ ( MUL_ ( cR, ( POW_ ( cL, SUB_ ( cR, CNST_ (1) ) ) ) ) ) );
     }
 
     else if (!IsVarInTree(node->left) && IsVarInTree(node->right))
     {
-        return RIGHT_COMP_FUNC_ ( MUL_ ( LN_ ( cL ), POW_ ( cL, cR) ) );
+        return  DUMP_ ( RIGHT_COMP_FUNC_ ( MUL_ ( LN_ ( cL ), POW_ ( cL, cR) ) ) );
     }
 
     return NewNumNode(0, NULL, NULL, tree);
@@ -229,7 +229,7 @@ Node* EXP_diff_func(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
-    return RIGHT_COMP_FUNC_( EXP_ ( cR ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_( EXP_ ( cR ) ) );
 }
 
 Node* LN_diff_func(Tree* tree, Node* node)
@@ -237,7 +237,7 @@ Node* LN_diff_func(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), cR));
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), cR) ) );
 }
 
 Node* LOG_diff_func(Tree* tree, Node* node)
@@ -247,17 +247,17 @@ Node* LOG_diff_func(Tree* tree, Node* node)
 
     if (IsVarInTree(node->left) && IsVarInTree(node->right))
     {
-        return  DIV_ ( SUB_ ( MUL_ ( DIV_ (dR, cR), LN_ ( cL ) ),  MUL_ ( DIV_ (dL, cL), LN_ ( cR ) ) ), POW_ ( LN_ ( cL ), CNST_ (2) ) );
+        return  DUMP_ (DIV_ ( SUB_ ( MUL_ ( DIV_ (dR, cR), LN_ ( cL ) ),  MUL_ ( DIV_ (dL, cL), LN_ ( cR ) ) ), POW_ ( LN_ ( cL ), CNST_ (2) ) ) );
     }
 
     else if (IsVarInTree(node->left) && !IsVarInTree(node->right))
     {
-        return LEFT_COMP_FUNC_ ( MUL_  ( CNST_ (-1), DIV_ ( LN_ ( cR ), MUL_ ( cL, POW_ ( LN_ ( cL ), CNST_ (2) ) ) ) ) );
+        return DUMP_ (LEFT_COMP_FUNC_ ( MUL_  ( CNST_ (-1), DIV_ ( LN_ ( cR ), MUL_ ( cL, POW_ ( LN_ ( cL ), CNST_ (2) ) ) ) ) ) );
     }
 
     else if (!IsVarInTree(node->left) && IsVarInTree(node->right))
     {
-        return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), MUL_ ( cR, LN_ (cL) ) ) );
+        return DUMP_ (RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), MUL_ ( cR, LN_ (cL) ) ) ) );
     }
 
     return CNST_ (0);
@@ -268,7 +268,7 @@ Node* SIN_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( COS_ ( cR ) );
+    return  DUMP_  (RIGHT_COMP_FUNC_ ( COS_ ( cR ) ) );
 }
 
 Node* COS_diff_func(Tree* tree, Node* node)
@@ -276,7 +276,7 @@ Node* COS_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( MUL_ ( CNST_ (-1), SIN_ ( cR ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( MUL_ ( CNST_ (-1), SIN_ ( cR ) ) ) );
 }
 
 Node* TG_diff_func(Tree* tree, Node* node)
@@ -284,7 +284,7 @@ Node* TG_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), POW_ ( COS_ ( cR ), CNST_(2) ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), POW_ ( COS_ ( cR ), CNST_(2) ) ) ) );
 }
 
 Node* CTG_diff_func(Tree* tree, Node* node)
@@ -292,7 +292,7 @@ Node* CTG_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (-1), POW_ ( SIN_ ( cR ), CNST_(2) ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (-1), POW_ ( SIN_ ( cR ), CNST_(2) ) ) ) );
 }
 
 Node* SH_diff_func(Tree* tree, Node* node)
@@ -300,7 +300,7 @@ Node* SH_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( CH_ ( cR ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( CH_ ( cR ) ) );
 }
 
 Node* CH_diff_func(Tree* tree, Node* node)
@@ -308,7 +308,7 @@ Node* CH_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-   return RIGHT_COMP_FUNC_ ( SH_ ( cR ) );
+   return  DUMP_ ( RIGHT_COMP_FUNC_ ( SH_ ( cR ) ) );
 }
 
 Node* TH_diff_func(Tree* tree, Node* node)
@@ -316,7 +316,7 @@ Node* TH_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( CH_ ( cR ), CNST_ (2) ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( CH_ ( cR ), CNST_ (2) ) ) ) );
 }
 
 Node* CTH_diff_func(Tree* tree, Node* node)
@@ -324,7 +324,7 @@ Node* CTH_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-   return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SH_ ( cR ), CNST_ (2) ) ) );
+   return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SH_ ( cR ), CNST_ (2) ) ) ) );
 }
 
 Node* ARCSIN_diff_func(Tree* tree, Node* node)
@@ -332,7 +332,7 @@ Node* ARCSIN_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( SUB_ ( CNST_(1), POW_ (cR, CNST_ (2) ) ), CNST_ (0.5) ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), POW_ ( SUB_ ( CNST_(1), POW_ (cR, CNST_ (2) ) ), CNST_ (0.5) ) ) ) );
 }
 
 Node* ARCCOS_diff_func(Tree* tree, Node* node)
@@ -340,7 +340,7 @@ Node* ARCCOS_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-   return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SUB_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ), CNST_ (0.5) ) ) );
+   return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), POW_ ( SUB_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ), CNST_ (0.5) ) ) ) );
 }
 
 Node* ARCTG_diff_func(Tree* tree, Node* node)
@@ -348,7 +348,7 @@ Node* ARCTG_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) );
+    return  DUMP_ (RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) ) );
 }
 
 Node* ARCCTG_diff_func(Tree* tree, Node* node)
@@ -356,5 +356,5 @@ Node* ARCCTG_diff_func(Tree* tree, Node* node)
     assert(node);
     assert(tree);
 
-    return RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_(-1), ADD_ ( CNST_(1), POW_ ( cR, CNST_ (2) ) ) ) ) );
 }

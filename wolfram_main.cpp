@@ -2,22 +2,20 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
-#include "read_wolfram_database.h"
+#include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 
 int main(int argc, const char* argv[])
 {
     atexit(FilesClosingProcessing);
 
-    const char* database_file_name = "database.txt";
+    const char* database_file_name = "database2.txt";
 
     if (argc > 1)
         database_file_name = argv[1];
 
     FilesOpeningProcessing();
     SetAllOpHash();
-
-    qsort(all_op, NUM_OF_OP, sizeof(StructOperation), OpHashComparator);
 
     Buffer buffer = {};
     GetDataBaseFromFile(&buffer, database_file_name);
@@ -29,7 +27,7 @@ int main(int argc, const char* argv[])
     tree.var->size = 0;
 
     char* cur_pos = buffer.data;
-    tree.root = FillNodeDataFromBuffer(&cur_pos, &tree, tree.root);
+    tree.root = GetGeneral(&cur_pos, &tree, tree.root);
 
 //     printf("BUFF: %s\n", buffer.data);
 //     printf("CUR_POS: %s\n", cur_pos);

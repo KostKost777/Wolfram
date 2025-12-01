@@ -173,6 +173,8 @@ bool IsVarInTree(Node* node);
 #define ARCTG_(var)      NewOpNode(ARCTG, NULL, var, tree)
 #define ARCCTG_(var)     NewOpNode(ARCCTG, NULL, var, tree)
 
+#define DUMP_(node)        PrintTexTree(node)
+
 #define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
 #define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
 

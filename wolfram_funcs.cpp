@@ -2,7 +2,7 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
-#include "read_wolfram_database.h"
+#include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 
 FILE* log_file = NULL;
@@ -78,7 +78,9 @@ Node* Defferentiate(Tree* tree, Node* node)
             for (size_t i = 0; i < NUM_OF_OP; ++i)
             {
                 if (all_op[i].op == node->value.op)
+                {
                     return all_op[i].diff_op_func(tree, node);
+                }
             }
 
         default: break;

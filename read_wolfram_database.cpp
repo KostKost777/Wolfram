@@ -358,8 +358,8 @@ int OpHashComparator(const void* param1, const void* param2)
     const StructOperation* op_1 = (const StructOperation*)param1;
     const StructOperation* op_2 = (const StructOperation*)param2;
 
-    printf("NAME1: %s HASH1: %llu\n", op_1->name, op_1->hash);
-    printf("NAME2: %s HASH2: %llu\n\n", op_2->name, op_2->hash);
+    printf("NAME1: %s HASH1: %zu\n", op_1->name, op_1->hash);
+    printf("NAME2: %s HASH2: %zu\n\n", op_2->name, op_2->hash);
 
     if (op_1->hash < op_2->hash) return -1;
 
