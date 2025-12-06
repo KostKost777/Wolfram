@@ -4,45 +4,52 @@
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
+#include "tex_funcs.h"
+#include "calculate_expression_funcs.h"
+#include "derivate_tree_funcs.h"
+
+const char* database_file_name = "database2.txt";
 
 int main(int argc, const char* argv[])
 {
-    atexit(FilesClosingProcessing);
-
-    const char* database_file_name = "database2.txt";
+    atexit(CloseLogFile);
+    atexit(CloseLaTex);
+    OpenLogFile();
+    LatexInit();
 
     if (argc > 1)
         database_file_name = argv[1];
-
-    FilesOpeningProcessing();
-    SetAllOpHash();
 
     Buffer buffer = {};
     GetDataBaseFromFile(&buffer, database_file_name);
 
     Tree tree = {};
-
     TreeCtor(&tree);
-    tree.var = (VariableArr*)calloc(1, sizeof(VariableArr));
-    tree.var->size = 0;
+    VariableArrInit(&tree);
+    ParseTree(&tree, buffer.data);
 
-    char* cur_pos = buffer.data;
-    tree.root = GetGeneral(&cur_pos, &tree, tree.root);
-
-//     printf("BUFF: %s\n", buffer.data);
-//     printf("CUR_POS: %s\n", cur_pos);
-//
-//     printf("TREE_ROOT: %p\n", tree.root);
-//     printf("VAR_SIZE: %llu\n", tree.var->size);
-
-    StartExpression(&tree);
+    PrintMessageInLaTex("Было введено следующие выражение: ");
 
     TreeDump(&tree);
 
-    StartDefferentiating(&tree);
+    RequestVariableValue(&tree);
+    double ans = CalculateExpression(&tree, tree.root);
+    printf("Result: %lf\n", ans);
+
+    Tree derivate_tree = {};
+    TreeCtor(&derivate_tree);
+
+    derivate_tree = GetDerivateTree(&tree);
+
+    //TreeDump(&derivate_tree);
+
+    TreeDtor(&derivate_tree);
+
+    //StartTaylor(&tree);
 
     TreeDtor(&tree);
     BufferDtor(&buffer);
+    VariableArrDtor(&tree);
 
     return 0;
 }

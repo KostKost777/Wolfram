@@ -48,4 +48,6 @@ char* GetFuncName(char* str);
 
 void UpdateVarArray(Tree* tree, Variable new_var);
 
+void ParseTree(Tree* tree, char* buffer);
+
 #endif

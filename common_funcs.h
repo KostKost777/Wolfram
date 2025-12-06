@@ -5,7 +5,7 @@
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
 
-typedef Node* (*diff_op_func_ptr)(Tree* tree, Node* node);
+typedef Node* (*diff_OpFuncPtr)(Tree* tree, Node* node);
 
 struct ArgsValue
 {
@@ -13,7 +13,7 @@ struct ArgsValue
     double num2;
 };
 
-typedef double (*op_func_ptr)(ArgsValue);
+typedef double (*OpFuncPtr)(ArgsValue);
 
 struct StructOperation
 {
@@ -21,15 +21,15 @@ struct StructOperation
     Operation op;
     size_t hash;
     ArgType args;
-    const op_func_ptr op_func;
-    const diff_op_func_ptr diff_op_func;
+    const OpFuncPtr op_func;
+    const diff_OpFuncPtr diff_op_func;
 };
-
-void SetAllOpHash();
 
 extern StructOperation all_op[NUM_OF_OP];
 
 //OP_FUNCS
+
+StructOperation* GetStructOperationOfNode(Node* node);
 
 double ADD_func(ArgsValue args_value);
 
@@ -70,6 +70,8 @@ double ARCCOS_func(ArgsValue args_value);
 double ARCTG_func(ArgsValue args_value);
 
 double ARCCTG_func(ArgsValue args_value);
+
+double FACT_func(ArgsValue args_value);
 
 //DIFF_FUNCS
 

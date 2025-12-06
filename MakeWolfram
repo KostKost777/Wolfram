@@ -1,0 +1,37 @@
+FLAGS = -g -DDEBUG
+all: wolf
+
+wolf: tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o
+	g++ $(FLAGS) tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o -o wolf
+
+wolfram_main.o: wolfram_main.cpp
+	g++ $(FLAGS) -c wolfram_main.cpp
+
+common_funcs.o: common_funcs.cpp
+	g++ $(FLAGS) -c common_funcs.cpp
+
+new_read_wolfram_database.o: new_read_wolfram_database.cpp
+	g++ $(FLAGS) -c new_read_wolfram_database.cpp
+
+wolfram_funcs.o: wolfram_funcs.cpp
+	g++ $(FLAGS) -c wolfram_funcs.cpp
+
+wolfram_dump_funcs.o: wolfram_dump_funcs.cpp
+	g++ $(FLAGS) -c wolfram_dump_funcs.cpp
+
+tex_funcs.o: tex_funcs.cpp
+	g++ $(FLAGS) -c tex_funcs.cpp
+
+calculate_expression_funcs.o: calculate_expression_funcs.cpp
+	g++ $(FLAGS) -c calculate_expression_funcs.cpp
+
+DSL_funcs.o: DSL_funcs.cpp
+	g++ $(FLAGS) -c DSL_funcs.cpp
+
+derivate_tree_funcs.o: derivate_tree_funcs.cpp
+	g++ $(FLAGS) -c derivate_tree_funcs.cpp
+
+tree_optimization_funcs.o: tree_optimization_funcs.cpp
+	g++ $(FLAGS) -c tree_optimization_funcs.cpp
+
+

@@ -16,6 +16,8 @@ void TreeDump(Tree* tree)
     static int file_counter = 0;
     char* image_file_name = GetNewImageFileName(file_counter);
 
+    //printf("FILE_NAME: %s\n", image_file_name);
+
     FILE* tex_file = fopen(tex_file_name, "a");
     FILE* graphiz_file = fopen(image_file_name, "w");
 
@@ -27,11 +29,11 @@ void TreeDump(Tree* tree)
     PrintBazeNode(graphiz_file, tree);
 
     if (tree->size > 0) {
-        printf("DUMP_TREE_ROOT: %p\n", tree->root);
+        //printf("DUMP_TREE_ROOT: %p\n", tree->root);
         PrintBazeEdge(graphiz_file, tree);
         PrintTree(tree->root, graphiz_file);
 
-        //PrintTexTree(tree->root);
+        PrintTexTree(tree->root);
     }
 
     fprintf(graphiz_file, "}");
@@ -93,288 +95,66 @@ void PrintTexNode(Node* node, FILE* tex_file)
         case OP:
             switch(node->value.op)
             {
-                case ADD:
-
-                    if (   node->parent != NULL
-                        && node->parent->value.op != DIV)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->left, tex_file);
-                        fprintf(tex_file, " + ");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-
-                    else
-                    {
-                        PrintTexNode(node->left, tex_file);
-                        fprintf(tex_file, " + ");
-                        PrintTexNode(node->right, tex_file);
-                    }
-                    break;
-
-                case MUL:
-                    PrintTexNode(node->left, tex_file);
-                    fprintf(tex_file, " \\cdot ");
-                    PrintTexNode(node->right, tex_file);
-                    break;
-
                 case SUB:
-                    if (node->parent != NULL && node->parent->value.op != DIV)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->left, tex_file);
-                        fprintf(tex_file, " - ");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
+                case ADD: PrintLaTex_ADD_SUB(node, tex_file);
+                          break;
 
-                    else
-                    {
-                        PrintTexNode(node->left, tex_file);
-                        fprintf(tex_file, " - ");
-                        PrintTexNode(node->right, tex_file);
-                    }
-                    break;
+                case MUL: PrintLaTex_MUL(node, tex_file);
+                          break;
 
-                case DIV:
-                    fprintf(tex_file, "\\frac{");
-                    PrintTexNode(node->left, tex_file);
-                    fprintf(tex_file, "}");
+                case DIV: PrintLaTex_DIV(node, tex_file);
+                          break;
 
-                    fprintf(tex_file, "{");
-                    PrintTexNode(node->right, tex_file);
-                    fprintf(tex_file, "}");
-                    break;
+                case POW: PrintLaTex_POW(node, tex_file);
+                          break;
 
-                case POW:
+                case EXP: PrintLaTex_EXP(node, tex_file);
+                          break;
 
-                    if (   GetArgsType(node->right) == UNARY
-                        || node->right->value.op == MUL)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->left, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
+                case LN: PrintOpByNameInLaTex(node, tex_file, "ln");
+                         break;
 
-                    else
-                        PrintTexNode(node->left, tex_file);
+                case LOG: PrintLaTex_LOG(node, tex_file);
+                          break;
 
-                    fprintf(tex_file, " ^ {");
-                    PrintTexNode(node->right, tex_file);
-                    fprintf(tex_file, "}");
-                    break;
+                case SIN: PrintOpByNameInLaTex(node, tex_file, "sin");
+                          break;
 
-                case EXP:
-                    fprintf(tex_file, "e ^ {");
-                    PrintTexNode(node->right, tex_file);
-                    fprintf(tex_file, "}");
-                    break;
+                case COS: PrintOpByNameInLaTex(node, tex_file, "cos");
+                          break;
 
-                case LN:
-                    fprintf(tex_file, "\\ln {");
+                case TG: PrintOpByNameInLaTex(node, tex_file, "tan");
+                         break;
 
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
+                case CTG: PrintOpByNameInLaTex(node, tex_file, "cot");
+                          break;
 
-                    fprintf(tex_file, "}");
-                    break;
+                case SH: PrintOpByNameInLaTex(node, tex_file, "sinh");
+                         break;
 
-                case LOG:
-                    fprintf(tex_file, "\\log_{");
-                    PrintTexNode(node->left, tex_file);
-                    fprintf(tex_file, "}");
+                case CH: PrintOpByNameInLaTex(node, tex_file, "cosh");
+                         break;
 
-                    fprintf(tex_file, " ");
-                    PrintTexNode(node->right, tex_file);
-                    break;
+                case TH: PrintOpByNameInLaTex(node, tex_file, "tanh");
+                         break;
 
-                case SIN:
-                    fprintf(tex_file, "\\sin {");
+                case CTH: PrintOpByNameInLaTex(node, tex_file, "coth");
+                          break;
 
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
+                case ARCSIN: PrintOpByNameInLaTex(node, tex_file, "arcsin");
+                             break;
 
-                    fprintf(tex_file, "}");
-                    break;
+                case ARCCOS: PrintOpByNameInLaTex(node, tex_file, "arccos");
+                             break;
 
-                case COS:
-                    fprintf(tex_file, "\\cos {");
+                case ARCTG: PrintOpByNameInLaTex(node, tex_file, "arctan");
+                            break;
 
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
+                case ARCCTG: PrintOpByNameInLaTex(node, tex_file, "arccot");
+                             break;
 
-                    fprintf(tex_file, "}");
-                    break;
-
-                case TG:
-                    fprintf(tex_file, "\\tan {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case CTG:
-                    fprintf(tex_file, "\\cot {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case SH:
-                    fprintf(tex_file, "\\sinh {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case CH:
-                    fprintf(tex_file, "\\cosh {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case TH:
-                    fprintf(tex_file, "\\tanh {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case CTH:
-
-                    fprintf(tex_file, "\\coth {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case ARCSIN:
-                    fprintf(tex_file, "\\arcsin {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case ARCCOS:
-                    fprintf(tex_file, "\\arccos {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case ARCTG:
-                    fprintf(tex_file, "\\arctan {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
-
-                case ARCCTG:
-                    fprintf(tex_file, "\\arccot {");
-
-                    if (GetArgsType(node->right) == UNARY)
-                    {
-                        fprintf(tex_file, "\\left(");
-                        PrintTexNode(node->right, tex_file);
-                        fprintf(tex_file, "\\right)");
-                    }
-                    else
-                        PrintTexNode(node->right, tex_file);
-
-                    fprintf(tex_file, "}");
-                    break;
+                case FACT: PrintLaTex_FACT(node, tex_file);
+                           break;
 
                 default: break;
             }
@@ -519,7 +299,7 @@ void FillLogFile(char* image_file_name,  Tree* tree, int file_counter)
 
     const int PICTURE_WIDTH = 2000;
 
-    fprintf(log_file, "\n\n<img src=image%d.svg width=%dpx>\n\n",
+    fprintf(log_file, "\n\n<img src=Images\\image%d.svg width=%dpx>\n\n",
                        file_counter, PICTURE_WIDTH);
 
     fprintf(log_file, "--------------------------------------------------------------------------------------------------------------------------------------------\n\n");
@@ -572,9 +352,9 @@ Node* PrintTexTree(Node* node)
 
     FILE* tex_file = fopen(tex_file_name, "a");
 
-    fprintf(tex_file, "$$");
+    fprintf(tex_file, "\\begin{dmath*}");
     PrintTexNode(node, tex_file);
-    fprintf(tex_file, "$$");
+    fprintf(tex_file, "\\end{dmath*}");
 
     fprintf(tex_file, "\n\\vspace{1cm}\n");
 
@@ -588,18 +368,8 @@ static char* GetNewDotCmd(int file_counter)
     char str_command[100] = "";
 
     snprintf(str_command, sizeof(str_command),
-            "dot -Tsvg image%d.txt -o image%d.svg",
+            "dot -Tsvg Images\\image%d.txt -o Images\\image%d.svg",
              file_counter, file_counter);
-
-    return strdup(str_command);
-}
-
-char* GetTexCmd()
-{
-    char str_command[100] = "";
-
-    snprintf(str_command, sizeof(str_command),
-            "pdflatex %s", tex_file_name);
 
     return strdup(str_command);
 }
@@ -609,9 +379,127 @@ static char* GetNewImageFileName(int file_counter)
     char str_file_counter[100] = "";
 
     snprintf(str_file_counter, sizeof(str_file_counter),
-             "image%d.txt", file_counter);
+             "Images\\image%d.txt", file_counter);
 
     return strdup(str_file_counter);
 }
+
+void PrintLaTex_ADD_SUB(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    char sign = '\0';
+    if (node->value.op == ADD) sign = '+';
+    else sign = '-';
+
+    if (   node->parent != NULL
+        && node->parent->value.op == MUL)
+    {
+        fprintf(tex_file, "\\left(");
+        PrintTexNode(node->left, tex_file);
+        fprintf(tex_file, " %c ", sign);
+        PrintTexNode(node->right, tex_file);
+        fprintf(tex_file, "\\right)");
+        return;
+    }
+
+    PrintTexNode(node->left, tex_file);
+    fprintf(tex_file, " %c ", sign);
+    PrintTexNode(node->right, tex_file);
+}
+
+void PrintLaTex_MUL(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    PrintTexNode(node->left, tex_file);
+    fprintf(tex_file, " \\cdot ");
+    PrintTexNode(node->right, tex_file);
+}
+
+void PrintLaTex_DIV(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    fprintf(tex_file, "\\frac{");
+    PrintTexNode(node->left, tex_file);
+    fprintf(tex_file, "}");
+
+    fprintf(tex_file, "{");
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, "}");
+}
+
+void PrintLaTex_POW(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    if (   node->left->value.op == ADD
+        || node->left->value.op == SUB)
+    {
+        fprintf(tex_file, "\\left(");
+        PrintTexNode(node->left, tex_file);
+        fprintf(tex_file, "\\right)");
+    }
+
+    else
+        PrintTexNode(node->left, tex_file);
+
+    fprintf(tex_file, " ^ {");
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, "}");
+}
+
+void PrintLaTex_EXP(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    fprintf(tex_file, "e ^ {");
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, "}");
+}
+
+void PrintOpByNameInLaTex(Node* node, FILE* tex_file, const char* name)
+{
+    assert(node);
+    assert(tex_file);
+
+    fprintf(tex_file, "\\%s {", name);
+
+    fprintf(tex_file, "\\left(");
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, "\\right)");
+
+    fprintf(tex_file, "}");
+}
+
+void PrintLaTex_FACT(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, "!");
+}
+
+void PrintLaTex_LOG(Node* node, FILE* tex_file)
+{
+    assert(node);
+    assert(tex_file);
+
+    fprintf(tex_file, "\\log_{");
+    PrintTexNode(node->left, tex_file);
+    fprintf(tex_file, "}");
+
+    fprintf(tex_file, " \\left(");
+    PrintTexNode(node->right, tex_file);
+    fprintf(tex_file, " \\right)");
+}
+
 
 

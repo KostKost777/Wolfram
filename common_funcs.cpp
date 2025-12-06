@@ -5,35 +5,47 @@
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
+#include "DSL_funcs.h"
 
 StructOperation all_op[NUM_OF_OP] =
 {
-{"+",      ADD,     0,       BINARY,   ADD_func,    ADD_diff_func},
-{"-",      SUB,     0,       BINARY,   SUB_func,    SUB_diff_func},
-{"*",      MUL,     0,       BINARY,   MUL_func,    MUL_diff_func},
-{"/",      DIV,     0,       BINARY,   DIV_func,    DIV_diff_func},
-{"exp",    EXP,     0,     UNARY,    EXP_func,    EXP_diff_func},
-{"pow",    POW,     0,     BINARY,   POW_func,    POW_diff_func},
-{"ln",     LN,      0,      UNARY,    LN_func,     LN_diff_func},
-{"log",    LOG,     0,     BINARY,   LOG_func,    LOG_diff_func},
-{"cos",    COS,     0,     UNARY,    COS_func,    COS_diff_func},
-{"sin",    SIN,     0,     UNARY,    SIN_func,    SIN_diff_func},
-{"tg",     TG,      0,      UNARY,    TG_func,     TG_diff_func},
-{"ctg",    CTG,     0,     UNARY,    CTG_func,    CTG_diff_func},
-{"ch",     CH,      0,      UNARY,    CH_func,     CH_diff_func},
-{"sh",     SH,      0,      UNARY,    SH_func,     SH_diff_func},
-{"th",     TH,      0,      UNARY,    TH_func,     TH_diff_func},
-{"cth",    CTH,     0,     UNARY,    CTH_func,    CTH_diff_func},
-{"arcsin", ARCSIN,  0,  UNARY,    ARCSIN_func, ARCSIN_diff_func},
-{"arccos", ARCCOS,  0,  UNARY,    ARCCOS_func, ARCCOS_diff_func},
-{"arctg",  ARCTG,   0,   UNARY,    ARCTG_func,  ARCTG_diff_func},
-{"arcctg", ARCCTG,  0,  UNARY,    ARCCTG_func, ARCCTG_diff_func},
+{"+",      ADD,     GetHash("+") ,      BINARY,   ADD_func,    ADD_diff_func},
+{"-",      SUB,     GetHash("-"),       BINARY,   SUB_func,    SUB_diff_func},
+{"*",      MUL,     GetHash("*"),       BINARY,   MUL_func,    MUL_diff_func},
+{"/",      DIV,     GetHash("/"),       BINARY,   DIV_func,    DIV_diff_func},
+{"exp",    EXP,     GetHash("exp"),     UNARY,    EXP_func,    EXP_diff_func},
+{"pow",    POW,     GetHash("pow"),     BINARY,   POW_func,    POW_diff_func},
+{"ln",     LN,      GetHash("ln"),      UNARY,    LN_func,     LN_diff_func},
+{"log",    LOG,     GetHash("log"),     BINARY,   LOG_func,    LOG_diff_func},
+{"cos",    COS,     GetHash("cos"),     UNARY,    COS_func,    COS_diff_func},
+{"sin",    SIN,     GetHash("sin"),     UNARY,    SIN_func,    SIN_diff_func},
+{"tg",     TG,      GetHash("tg"),      UNARY,    TG_func,     TG_diff_func},
+{"ctg",    CTG,     GetHash("ctg"),     UNARY,    CTG_func,    CTG_diff_func},
+{"ch",     CH,      GetHash("ch"),      UNARY,    CH_func,     CH_diff_func},
+{"sh",     SH,      GetHash("sh"),      UNARY,    SH_func,     SH_diff_func},
+{"th",     TH,      GetHash("th"),      UNARY,    TH_func,     TH_diff_func},
+{"cth",    CTH,     GetHash("cth"),     UNARY,    CTH_func,    CTH_diff_func},
+{"arcsin", ARCSIN,  GetHash("arcsin"),  UNARY,    ARCSIN_func, ARCSIN_diff_func},
+{"arccos", ARCCOS,  GetHash("arccos"),  UNARY,    ARCCOS_func, ARCCOS_diff_func},
+{"arctg",  ARCTG,   GetHash("arctg"),   UNARY,    ARCTG_func,  ARCTG_diff_func},
+{"arcctg", ARCCTG,  GetHash("arcctg"),  UNARY,    ARCCTG_func, ARCCTG_diff_func},
+{"!",      FACT,    GetHash("!")     ,  UNARY,    FACT_func,    NULL}
 };
 
-void SetAllOpHash()
+StructOperation* GetStructOperationOfNode(Node* node)
 {
+    assert(node);
+    assert(node->type == OP);
+
     for (size_t i = 0; i < NUM_OF_OP; ++i)
-        all_op[i].hash = GetHash(all_op[i].name);
+    {
+        if (all_op[i].op == node->value.op)
+            return &all_op[i];
+    }
+
+    //unreachebale
+    assert(false);
+    return NULL;
 }
 
 double ADD_func(ArgsValue args_value)
@@ -167,6 +179,25 @@ double ARCCTG_func(ArgsValue args_value)
     return 1.0 / atan(args_value.num1);
 }
 
+double FACT_func(ArgsValue args_value)
+{
+    double ans = 1;
+
+    if (!IsDoubleEqual(args_value.num1, int(args_value.num1)))
+        return NAN;
+
+    else
+    {
+        while(args_value.num1 > 0)
+        {
+            ans *= args_value.num1;
+            args_value.num1--;
+        }
+    }
+
+    return ans;
+}
+
 //DIFF_FUNCS
 
 Node* ADD_diff_func(Tree* tree, Node* node)
@@ -237,7 +268,7 @@ Node* LN_diff_func(Tree* tree, Node* node)
     assert(tree);
     assert(node);
 
-    return  DUMP_ ( RIGHT_COMP_FUNC_ ( DIV_ ( CNST_ (1), cR) ) );
+    return  DUMP_ ( RIGHT_COMP_FUNC_ ( POW_ ( cR, CNST_ ( -1 ) ) ) );
 }
 
 Node* LOG_diff_func(Tree* tree, Node* node)

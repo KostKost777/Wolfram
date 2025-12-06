@@ -7,6 +7,14 @@
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 
+void ParseTree(Tree* tree, char* buffer)
+{
+    assert(tree);
+    assert(buffer);
+
+    tree->root = GetGeneral(&buffer,tree, tree->root);
+}
+
 Status GetDataBaseFromFile(Buffer* buffer,
                            const char* input_filename)
 {
@@ -112,7 +120,6 @@ Node* GetMulDivOp(char** str, Tree* tree, Node* node)
     node = GetPowOp(str, tree, node);
 
     fprintf(log_file, "<strong>Наичнаю проверку на наличие \"* или /\": </strong>\n |%s| \n\n", *str);
-
     while (**str == '*' || **str == '/')
     {
         fprintf(log_file, "<strong>Нашел </strong>\n\n");
@@ -215,9 +222,9 @@ Node* GetDoubleNumber(char** str, Tree* tree, Node* node)
     {
         fprintf(log_file, "<strong>Обнаружил минус, значит число отрицательное: </strong>\n |%s| \n\n", *str);
         sgn = -1;
-        *str += 1;
-    }
 
+        str += 1;
+    }
     if (!IsNum(**str))
     {
         fprintf(log_file, "<strong>Походуэто не число, пусть кто-то другой чекает: </strong>\n |%s| \n\n", *str);
@@ -400,7 +407,7 @@ Node* GetVariable(char** str, Tree* tree, Node* node)
 
 bool IsSymbolInVarName(char sym)
 {
-    return (sym >= 'a' && sym <= 'z') || (sym >= 'A' && sym <= 'Z') || sym == '_';
+    return isalpha(sym) || sym == '_';
 }
 
 char* GetFuncName(char* str)
@@ -424,6 +431,7 @@ char* GetFuncName(char* str)
     return strdup(func_name);
 }
 
+//  TODO: isdigit();
 bool IsNum(char sym)
 {
     return (sym >= '0' && sym <= '9');

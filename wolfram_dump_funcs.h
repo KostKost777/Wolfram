@@ -34,9 +34,23 @@ const char* GetNodeValueName(Node* node);
 
 static char* GetNewDotCmd(int file_counter);
 
-char* GetTexCmd();
-
 static char* GetNewImageFileName(int file_counter);
+
+void PrintLaTex_ADD_SUB(Node* node, FILE* tex_file);
+
+void PrintLaTex_MUL(Node* node, FILE* tex_file);
+
+void PrintLaTex_DIV(Node* node, FILE* tex_file);
+
+void PrintLaTex_POW(Node* node, FILE* tex_file);
+
+void PrintLaTex_EXP(Node* node, FILE* tex_file);
+
+void PrintOpByNameInLaTex(Node* node, FILE* tex_file, const char* name);
+
+void PrintLaTex_FACT(Node* node, FILE* tex_file);
+
+void PrintLaTex_LOG(Node* node, FILE* tex_file);
 
 #endif
 

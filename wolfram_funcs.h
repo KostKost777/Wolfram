@@ -5,7 +5,7 @@ extern FILE* log_file;
 
 const int NUM_OF_VARIABLE = 50;
 
-const int NUM_OF_OP = 20;
+const int NUM_OF_OP = 21;
 
 const double EPSILON = 10E-6;
 
@@ -51,7 +51,8 @@ enum Operation
     ARCTG = 16,
     ARCCTG = 17,
     TH = 18,
-    CTH = 19
+    CTH = 19,
+    FACT = 20
 };
 
 struct Variable
@@ -98,9 +99,9 @@ Status TreeCtor(Tree* tree);
 
 Node* NodeCtor(Node* parent);
 
-void FilesClosingProcessing();
+void CloseLogFile();
 
-void FilesOpeningProcessing();
+void OpenLogFile();
 
 size_t GetHash(const char* str);
 
@@ -110,20 +111,6 @@ void TreeDtor(Tree* tree);
 
 void DeleteNode(Tree* tree, Node* node);
 
-void RequestVariableValue(Tree* tree);
-
-double CalculateExpression(Tree* tree, Node* node);
-
-double StartExpression(Tree* tree);
-
-double GetVariableValue(Tree* tree, char* var_name);
-
-Tree StartDefferentiating(Tree* tree);
-
-Node* Defferentiate(Tree* tree, Node* node);
-
-Node* CopySubtree(Tree* tree, Node* node);
-
 ArgType GetArgsType(Node* node);
 
 void DefineAndSetArgType(Node* node);
@@ -132,50 +119,18 @@ bool IsDoubleEqual(double num1, double num2);
 
 bool IsDoubleBigger(double num1, double num2);
 
-Node* NewNumNode(double num, Node* left, Node* right, Tree* tree);
-
-Node* NewVarNode(Variable var, Node* left, Node* right, Tree* tree);
-
-Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree);
-
-double ConstantsOptimization(Node* node, Tree* tree);
-
-Status NeutralElementOptimization(Node* node, Tree* tree);
-
-void RemoveNeutralElement(Tree* tree, Node* node_dad, Node* node_first_son);
-
 bool IsVarInTree(Node* node);
 
-#define dL               Defferentiate(tree, node->left)
-#define dR               Defferentiate(tree, node->right)
-#define cL               CopySubtree(tree, node->left)
-#define cR               CopySubtree(tree, node->right)
+void StartTaylor (Tree* tree);
 
-#define CNST_(var)       NewNumNode(var, NULL, NULL, tree)
-#define ADD_(var1, var2) NewOpNode(ADD, var1, var2, tree)
-#define SUB_(var1, var2) NewOpNode(SUB, var1, var2, tree)
-#define MUL_(var1, var2) NewOpNode(MUL, var1, var2, tree)
-#define DIV_(var1, var2) NewOpNode(DIV, var1, var2, tree)
-#define POW_(var1, var2) NewOpNode(POW, var1, var2, tree)
-#define EXP_(var)        NewOpNode(EXP, NULL, var, tree)
-#define LN_(var)         NewOpNode(LN, NULL, var, tree)
-#define LOG_(var1, var2) NewOpNode(LOG, var1, var2, tree)
-#define COS_(var)        NewOpNode(COS, NULL, var, tree)
-#define SIN_(var)        NewOpNode(SIN, NULL, var, tree)
-#define TG_(var)         NewOpNode(TG, NULL, var, tree)
-#define CTG_(var)        NewOpNode(CTG, NULL, var, tree)
-#define SH_(var)         NewOpNode(SH, NULL, var, tree)
-#define CH_(var)         NewOpNode(CH, NULL, var, tree)
-#define TH_(var)         NewOpNode(TH, NULL, var, tree)
-#define CTH_(var)        NewOpNode(CTH, NULL, var, tree)
-#define ARCCOS_(var)     NewOpNode(ARCCOS, NULL, var, tree)
-#define ARCSIN_(var)     NewOpNode(ARCSIN, NULL, var, tree)
-#define ARCTG_(var)      NewOpNode(ARCTG, NULL, var, tree)
-#define ARCCTG_(var)     NewOpNode(ARCCTG, NULL, var, tree)
+void SetVarXValue(Tree* tree, double value);
 
-#define DUMP_(node)        PrintTexTree(node)
+Node* MakeTaylorTree(Tree* tree,
+                     double* taylor_coeff, size_t member,
+                     size_t accuracy, Variable var_x);
 
-#define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
-#define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
+void VariableArrDtor(Tree* tree);
+
+void VariableArrInit(Tree* tree);
 
 #endif
