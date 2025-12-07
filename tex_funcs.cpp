@@ -1,7 +1,10 @@
 #include <TXLib.h>
 #include <errno.h>
 
+#include "wolfram_funcs.h"
 #include "tex_funcs.h"
+#include "common_funcs.h"
+#include "wolfram_dump_funcs.h"
 
 void LatexInit()
 {
@@ -48,6 +51,109 @@ void CloseLaTex()
 
     system(tex_cmd);
     free(tex_cmd);
+}
+
+void PrintTaylor(double* taylor_coeffs, double x_point, size_t accuracy)
+{
+    assert(taylor_coeffs);
+    FILE* tex_file = fopen(tex_file_name, "a");
+
+    PrintMessageInLaTex("Разложение по Тейлору: ");
+
+    fprintf(tex_file, "\\begin{dmath*}");
+
+    bool is_first_member = true;
+
+    for (size_t i = 0; i <= accuracy; ++i)
+    {
+        if (IsDoubleEqual(taylor_coeffs[i], 0))
+            continue;
+
+        double coeff = fabs(taylor_coeffs[i]) / fact((double)i);
+
+        PrintTaylorSign(tex_file, taylor_coeffs[i], is_first_member);
+
+        PrintTaylorMember(tex_file, coeff, x_point, i);
+
+        is_first_member = false;
+    }
+
+    if (IsDoubleEqual(x_point, 0))
+        fprintf(tex_file, " + o(x ^ %llu)", accuracy);
+    else
+        fprintf(tex_file, " + o((x - %lf) ^ %llu)", x_point, accuracy);
+
+    fprintf(tex_file, "\\end{dmath*}");
+
+    fprintf(tex_file, "\n\\vspace{1cm}\n");
+
+    fclose(tex_file);
+}
+
+void PrintTaylorSign(FILE* tex_file, double coeff, bool is_first_member)
+{
+    assert(tex_file);
+
+    if (IsDoubleBigger(0, coeff))
+        fprintf(tex_file, " - ");
+
+    else if (IsDoubleBigger(coeff, 0) && !is_first_member)
+        fprintf(tex_file, " + ");
+}
+
+void PrintTaylorMember(FILE* tex_file, double coeff,
+                       double x_point, size_t member)
+{
+    assert(tex_file);
+
+    if (IsDoubleEqual(x_point, 0))
+    {
+        if (member > 1)
+        {
+            PrintNeutralElement(tex_file, coeff);
+            fprintf(tex_file, "x ^ %llu", member);
+        }
+
+        else if (member == 1)
+        {
+            PrintNeutralElement(tex_file, coeff);
+            fprintf(tex_file, "x");
+        }
+
+        else
+            fprintf(tex_file, "%g", coeff);
+
+        return;
+    }
+
+    if (member > 1)
+    {
+        PrintNeutralElement(tex_file, coeff);
+        fprintf(tex_file, "(x - %g) ^ %llu", x_point, member);
+    }
+
+    else if (member == 1)
+    {
+        PrintNeutralElement(tex_file, coeff);
+        fprintf(tex_file, "(x - %g)", x_point);
+    }
+
+    else
+        fprintf(tex_file, "%g", coeff);
+}
+
+void PrintNeutralElement(FILE* tex_file, double coeff)
+{
+    assert(tex_file);
+
+    if (IsDoubleEqual(coeff, 1))
+        return;
+
+    else if (IsDoubleEqual(coeff, -1))
+        fprintf(tex_file, "-");
+
+    else
+        fprintf(tex_file, "%g \\cdot ", coeff);
 }
 
 void PrintMessageInLaTex(const char* message, ...)

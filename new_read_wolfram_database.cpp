@@ -6,6 +6,7 @@
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
+#include "DSL_funcs.h"
 
 void ParseTree(Tree* tree, char* buffer)
 {

@@ -7,6 +7,7 @@
 #include "tex_funcs.h"
 #include "calculate_expression_funcs.h"
 #include "derivate_tree_funcs.h"
+#include "taylor_funcs.h"
 
 const char* database_file_name = "database2.txt";
 
@@ -41,15 +42,18 @@ int main(int argc, const char* argv[])
 
     derivate_tree = GetDerivateTree(&tree);
 
-    //TreeDump(&derivate_tree);
+    PrintMessageInLaTex("Первая производная: ");
+    TreeDump(&derivate_tree);
 
     TreeDtor(&derivate_tree);
 
-    //StartTaylor(&tree);
+    Tree taylor_tree = GetTaylorTree(&tree);
 
-    TreeDtor(&tree);
-    BufferDtor(&buffer);
+    TreeDtor(&taylor_tree);
+
     VariableArrDtor(&tree);
+    BufferDtor(&buffer);
+    TreeDtor(&tree);
 
     return 0;
 }

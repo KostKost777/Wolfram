@@ -31,6 +31,8 @@ extern StructOperation all_op[NUM_OF_OP];
 
 StructOperation* GetStructOperationOfNode(Node* node);
 
+double fact(double num);
+
 double ADD_func(ArgsValue args_value);
 
 double SUB_func(ArgsValue args_value);

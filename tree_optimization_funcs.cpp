@@ -96,15 +96,15 @@ void Optimize_ADD_SUB_NeutralElement(Node* node, Tree* tree)
         RemoveNeutralElement(tree, node, node->left);
     }
 
-    else if (   node->left->type == NUM
-             && node->value.op == SUB
-             && IsDoubleEqual(node->left->value.num, 0))
-    {
-        OptimizeNeutralElement(node->right, tree);
-
-        node->value.op = MUL;
-        node->left->value.num = -1;
-    }
+//     else if (   node->left->type == NUM
+//              && node->value.op == SUB
+//              && IsDoubleEqual(node->left->value.num, 0))
+//     {
+//         OptimizeNeutralElement(node->right, tree);
+//
+//         node->value.op = MUL;
+//         node->left->value.num = -1;
+//     }
 }
 
 void Optimize_MUL_DIV_NeutralElement(Node* node, Tree* tree)

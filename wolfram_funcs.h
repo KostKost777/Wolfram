@@ -121,14 +121,6 @@ bool IsDoubleBigger(double num1, double num2);
 
 bool IsVarInTree(Node* node);
 
-void StartTaylor (Tree* tree);
-
-void SetVarXValue(Tree* tree, double value);
-
-Node* MakeTaylorTree(Tree* tree,
-                     double* taylor_coeff, size_t member,
-                     size_t accuracy, Variable var_x);
-
 void VariableArrDtor(Tree* tree);
 
 void VariableArrInit(Tree* tree);

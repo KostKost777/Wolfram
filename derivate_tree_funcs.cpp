@@ -12,7 +12,7 @@ Tree GetDerivateTree(Tree* tree)
 {
     assert(tree);
 
-    PrintMessageInLaTex("Найдем производную: ");
+    //PrintMessageInLaTex("Найдем производную: ");
 
     Tree derivate_tree = {};
     TreeCtor(&derivate_tree);

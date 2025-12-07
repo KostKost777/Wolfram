@@ -181,19 +181,22 @@ double ARCCTG_func(ArgsValue args_value)
 
 double FACT_func(ArgsValue args_value)
 {
-    double ans = 1;
 
     if (!IsDoubleEqual(args_value.num1, int(args_value.num1)))
         return NAN;
 
-    else
-    {
-        while(args_value.num1 > 0)
+    return fact(args_value.num1);
+}
+
+double fact(double num)
+{
+    double ans = 1;
+
+    while(num > 0)
         {
-            ans *= args_value.num1;
-            args_value.num1--;
+            ans *= num;
+            num--;
         }
-    }
 
     return ans;
 }
