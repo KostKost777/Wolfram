@@ -85,7 +85,7 @@ void PrintTexNode(Node* node, FILE* tex_file)
     switch(node->type)
     {
         case NUM:
-            fprintf(tex_file, "%g", node->value.num);
+            PrintLaTex_NUM(tex_file, node->value.num);
             break;
 
         case VAR:
@@ -356,7 +356,7 @@ Node* PrintTexTree(Node* node)
     PrintTexNode(node, tex_file);
     fprintf(tex_file, "\\end{dmath*}");
 
-    fprintf(tex_file, "\n\\vspace{1cm}\n");
+    fprintf(tex_file, "\n\\singlespacing \n");
 
     fclose(tex_file);
 
@@ -499,6 +499,16 @@ void PrintLaTex_LOG(Node* node, FILE* tex_file)
     fprintf(tex_file, " \\left(");
     PrintTexNode(node->right, tex_file);
     fprintf(tex_file, " \\right)");
+}
+
+void PrintLaTex_NUM(FILE* tex_file, double num)
+{
+    assert(tex_file);
+
+    if (num < 0)
+        fprintf(tex_file, "\\left(%g\\right)", num);
+    else
+        fprintf(tex_file, "%g", num);
 }
 
 

@@ -52,5 +52,7 @@ void PrintLaTex_FACT(Node* node, FILE* tex_file);
 
 void PrintLaTex_LOG(Node* node, FILE* tex_file);
 
+void PrintLaTex_NUM(FILE* tex_file, double num);
+
 #endif
 

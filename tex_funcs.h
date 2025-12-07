@@ -22,4 +22,6 @@ void PrintTaylorMember(FILE* tex_file, double coeff,
 
 void PrintNeutralElement(FILE* tex_file, double coeff);
 
+void PrintPictureInLatex(const char* name_of_graph_file);
+
 #endif

@@ -119,6 +119,8 @@ bool IsDoubleEqual(double num1, double num2);
 
 bool IsDoubleBigger(double num1, double num2);
 
+void SetXValue(Tree* tree, double value);
+
 bool IsVarInTree(Node* node);
 
 void VariableArrDtor(Tree* tree);

@@ -26,6 +26,7 @@ void LatexInit()
                        "\\usepackage[utf8]{inputenc}\n"
                        "\\usepackage[russian]{babel}\n"
                        "\\usepackage{breqn}\n"
+                       "\\usepackage{setspace}"
 
 
                         "\\title{Вольфрам}\n"
@@ -85,7 +86,7 @@ void PrintTaylor(double* taylor_coeffs, double x_point, size_t accuracy)
 
     fprintf(tex_file, "\\end{dmath*}");
 
-    fprintf(tex_file, "\n\\vspace{1cm}\n");
+    fprintf(tex_file, "\n\\singlespacing \n");
 
     fclose(tex_file);
 }
@@ -156,6 +157,16 @@ void PrintNeutralElement(FILE* tex_file, double coeff)
         fprintf(tex_file, "%g \\cdot ", coeff);
 }
 
+void PrintPictureInLatex(const char* name_of_graph_file)
+{
+    FILE* tex_file = fopen(tex_file_name, "a");
+
+    fprintf(tex_file, "\\includegraphics[width=0.7\\paperwidth]{%s}",
+                                                name_of_graph_file);
+
+    fclose(tex_file);
+}
+
 void PrintMessageInLaTex(const char* message, ...)
 {
     assert(message);
@@ -168,7 +179,7 @@ void PrintMessageInLaTex(const char* message, ...)
     fprintf(tex_file, "\\centering");
     fprintf(tex_file, "{\\large");
     vfprintf(tex_file, message, args);
-    fprintf(tex_file, "}\n\\vspace{1cm}\n");
+    fprintf(tex_file, "}\n\\singlespacing \n");
 
     va_end(args);
 

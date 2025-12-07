@@ -19,7 +19,21 @@ Status TreeCtor(Tree* tree)
     return success;
 }
 
+void SetXValue(Tree* tree, double value)
+{
+    assert(tree);
 
+    size_t hash_x = GetHash("x");
+
+    for (size_t i = 0; i < tree->var->size; ++i)
+    {
+        if (tree->var->arr[i].var_hash == hash_x)
+        {
+            tree->var->arr[i].var_data = value;
+            return;
+        }
+    }
+}
 
 bool IsDoubleEqual(double num1, double num2)
 {

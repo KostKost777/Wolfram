@@ -9,20 +9,11 @@
 #include "tree_optimization_funcs.h"
 #include "taylor_funcs.h"
 
-Tree GetTaylorTree(Tree* tree)
+Tree GetTaylorTree(Tree* tree, double x_point, size_t accuracy)
 {
     assert(tree);
 
-    double x_point = 0;
-    printf("Enter a point in the neighborhood "
-           "of which you want to obtain the Taylor expansion: ");
-    scanf("%lf", &x_point);
-
     Variable* var_x = SetNeighborhoodInVarXAndReturn(tree, x_point);
-
-    size_t accuracy = 0;
-    printf("Enter the accuracy of the expansion: ");
-    scanf("%llu", &accuracy);
 
     Tree taylor_tree = {};
     TreeCtor(&taylor_tree);
@@ -75,7 +66,7 @@ Node* MakeTaylorTree(Tree* tree, double* taylor_coeffs,
 
     Node* taylor_member =  MUL_
                               ( DIV_
-                                   ( CNST_ ( fabs(taylor_coeffs[member]) ),
+                                   ( CNST_ ( taylor_coeffs[member] ),
                                      FACT_ ( CNST_ ( (double)member ) ) ),
 
                                  POW_
@@ -84,20 +75,9 @@ Node* MakeTaylorTree(Tree* tree, double* taylor_coeffs,
                                            CNST_ (var_x->var_data) ),
                                       CNST_ ( (double)member) ) );
 
-    if (   member < accuracy
-        && IsDoubleBigger(taylor_coeffs[member + 1], 0))
-    {
-        return ADD_ ( taylor_member,
-                      MakeTaylorTree(tree, taylor_coeffs,
-                                     member + 1, accuracy, var_x));
-    }
-
-    else
-    {
-        return SUB_ ( taylor_member,
-                      MakeTaylorTree(tree, taylor_coeffs,
-                                     member + 1, accuracy, var_x));
-    }
+    return ADD_ ( taylor_member,
+                    MakeTaylorTree(tree, taylor_coeffs,
+                                    member + 1, accuracy, var_x));
 }
 
 Variable* SetNeighborhoodInVarXAndReturn(Tree* tree, double value)

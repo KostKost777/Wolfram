@@ -7,13 +7,49 @@
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 #include "DSL_funcs.h"
+#include "graph_funcs.h"
 
-void ParseTree(Tree* tree, char* buffer)
+void ParseTree(Tree* tree, Scale* scale, char* buffer)
 {
     assert(tree);
     assert(buffer);
+    printf("BUFFER: %s\n", buffer);
+    GetScale(&buffer, scale);
+    printf("BUFFER: %s\n", buffer);
 
-    tree->root = GetGeneral(&buffer,tree, tree->root);
+    tree->root = GetGeneral(&buffer, tree, tree->root);
+}
+
+void GetScale(char** buffer, Scale* scale)
+{
+    int counter = 1;
+    int num_len = 0;
+    while(**buffer == ':')
+    {
+        *buffer += 1;
+
+        switch(counter)
+        {
+            case 1: sscanf(*buffer, "%lf%n", &scale->x_min, &num_len);
+                    break;
+
+            case 2: sscanf(*buffer, "%lf%n", &scale->x_max, &num_len);
+                    break;
+
+            case 3: sscanf(*buffer, "%lf%n", &scale->y_min, &num_len);
+                    break;
+
+            case 4: sscanf(*buffer, "%lf%n", &scale->y_max, &num_len);
+                    break;
+
+            default: fprintf(log_file, "Ошибка грамматики ввода координат графика");
+                     break;
+        }
+        printf("%g, %g, %g, %g\n",  scale->x_min, scale->x_max,  scale->y_min, scale->y_max);
+        counter++;
+        *buffer += num_len;
+        SkipSpaces(buffer);
+    }
 }
 
 Status GetDataBaseFromFile(Buffer* buffer,

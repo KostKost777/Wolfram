@@ -5,6 +5,7 @@ const size_t MAX_FUNC_LEN = 10;
 
 const size_t MAX_NAME_LAN = 50;
 
+#include "graph_funcs.h"
 #include "wolfram_funcs.h"
 
 struct Buffer
@@ -48,6 +49,8 @@ char* GetFuncName(char* str);
 
 void UpdateVarArray(Tree* tree, Variable new_var);
 
-void ParseTree(Tree* tree, char* buffer);
+void ParseTree(Tree* tree, Scale* scale, char* buffer);
+
+void GetScale(char** buffer, Scale* scale);
 
 #endif

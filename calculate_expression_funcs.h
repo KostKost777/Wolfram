@@ -1,6 +1,8 @@
 #ifndef CALCULATE_EXPRESSION_FUNCS
 #define CALCULATE_EXPRESSION_FUNCS
 
+#include "common_funcs.h"
+
 void RequestVariableValue(Tree* tree);
 
 double CalculateExpression(Tree* tree, Node* node);

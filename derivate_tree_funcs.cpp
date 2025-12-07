@@ -12,8 +12,6 @@ Tree GetDerivateTree(Tree* tree)
 {
     assert(tree);
 
-    //PrintMessageInLaTex("Найдем производную: ");
-
     Tree derivate_tree = {};
     TreeCtor(&derivate_tree);
     derivate_tree.var = tree->var;
