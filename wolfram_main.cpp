@@ -6,6 +6,7 @@
 #include "common_funcs.h"
 #include "tex_funcs.h"
 #include "calculate_expression_funcs.h"
+#include "double_compare_funcs.h"
 #include "derivate_tree_funcs.h"
 #include "taylor_funcs.h"
 #include "graph_funcs.h"

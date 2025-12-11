@@ -15,4 +15,6 @@ double ExecuteUnaryOperation(Tree* tree, Node* node, OpFuncPtr func);
 
 double ExecuteBinaryOperation(Tree* tree, Node* node, OpFuncPtr func);
 
+void SetXValue(Tree* tree, double value);
+
 #endif

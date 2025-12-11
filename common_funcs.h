@@ -3,7 +3,6 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
-#include "new_read_wolfram_database.h"
 
 typedef Node* (*diff_OpFuncPtr)(Tree* tree, Node* node);
 
@@ -24,6 +23,8 @@ struct StructOperation
     const OpFuncPtr op_func;
     const diff_OpFuncPtr diff_op_func;
 };
+
+#include "new_read_wolfram_database.h"
 
 extern StructOperation all_op[NUM_OF_OP];
 

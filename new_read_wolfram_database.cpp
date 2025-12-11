@@ -5,6 +5,7 @@
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
+#include "double_compare_funcs.h"
 #include "common_funcs.h"
 #include "DSL_funcs.h"
 #include "graph_funcs.h"
@@ -13,9 +14,9 @@ void ParseTree(Tree* tree, Scale* scale, char* buffer)
 {
     assert(tree);
     assert(buffer);
-    printf("BUFFER: %s\n", buffer);
+    //printf("BUFFER: %s\n", buffer);
     GetScale(&buffer, scale);
-    printf("BUFFER: %s\n", buffer);
+    //printf("BUFFER: %s\n", buffer);
 
     tree->root = GetGeneral(&buffer, tree, tree->root);
 }
@@ -45,7 +46,7 @@ void GetScale(char** buffer, Scale* scale)
             default: fprintf(log_file, "Ошибка грамматики ввода координат графика");
                      break;
         }
-        printf("%g, %g, %g, %g\n",  scale->x_min, scale->x_max,  scale->y_min, scale->y_max);
+        //printf("%g, %g, %g, %g\n",  scale->x_min, scale->x_max,  scale->y_min, scale->y_max);
         counter++;
         *buffer += num_len;
         SkipSpaces(buffer);
@@ -210,7 +211,7 @@ Node* GetMostPreority(char** str, Tree* tree, Node* node)
         fprintf(log_file, "<strong>Ошибка не хвататет \")\"</strong>\n |%s| \n\n", *str);
     }
 
-    node = GetDoubleNumber(str, tree, node);
+    node = GetDoubleNumber(str, tree);
     if (node != NULL)
     {
         fprintf(log_file, "<strong>Это оказалось число</strong>\n |%s| \n\n", *str);
@@ -247,7 +248,7 @@ Node* GetPowOp(char** str, Tree* tree, Node* node)
     return node;
 }
 
-Node* GetDoubleNumber(char** str, Tree* tree, Node* node)
+Node* GetDoubleNumber(char** str, Tree* tree)
 {
     fprintf(log_file, "<strong>Вызов GetDoubleNumber</strong>\n");
     fprintf(log_file, "<strong>Состояние буфера: </strong>\n |%s| \n\n", *str);
@@ -262,26 +263,26 @@ Node* GetDoubleNumber(char** str, Tree* tree, Node* node)
 
         str += 1;
     }
-    if (!IsNum(**str))
+    if (!isdigit(**str))
     {
-        fprintf(log_file, "<strong>Походуэто не число, пусть кто-то другой чекает: </strong>\n |%s| \n\n", *str);
+        fprintf(log_file, "<strong>Походу это не число, пусть кто-то другой чекает: </strong>\n |%s| \n\n", *str);
         return NULL;
     }
 
-    while (IsNum(**str))
+    while (isdigit(**str))
     {
         val = 10 * val + (**str - '0');
         *str += 1;
     }
 
-    if (**str == '.' && IsNum(*(*str + 1)) )
+    if (**str == '.' && isdigit(*(*str + 1)) )
     {
         fprintf(log_file, "<strong>Это число типа double: </strong>\n |%s| \n\n", *str);
         *str += 1;
 
         size_t count_num_after_point = 0;
 
-        while (IsNum(**str))
+        while (isdigit(**str))
         {
             val = 10 * val + (**str - '0');
 
@@ -313,7 +314,7 @@ Node* GetWord(char** str, Tree* tree, Node* node)
         return node;
     }
 
-    node = GetVariable(str, tree, node);
+    node = GetVariable(str, tree);
 
     if (node != NULL)
     {
@@ -330,88 +331,113 @@ Node* GetFunction(char** str, Tree* tree, Node* node)
     fprintf(log_file, "<strong>Состояние буфера: </strong>\n |%s| \n\n", *str);
 
     char* func_name = GetFuncName(*str);
-    size_t hash_func_name = GetHash(func_name);
-    bool is_op = false;
     size_t i = 0;
 
     fprintf(log_file, "<strong>Получил имя: |%s|</strong>\n\n", func_name);
 
-    for (; i < NUM_OF_OP; ++i)
-    {
-        if (hash_func_name == all_op[i].hash)
-        {
-            is_op = true;
-            break;
-        }
-    }
+    StructOperation* now_op = SearchOperation(func_name);
 
-    if (is_op)
+    if (now_op == NULL)
     {
         free(func_name);
         func_name = NULL;
+        return NULL;
+    }
 
-        fprintf(log_file, "<strong>Состояние буферера до пропуска \"%s\": </strong>\n |%s| \n\n", all_op[i].name, *str);
-        *str += strlen(all_op[i].name);
-        fprintf(log_file, "<strong>Состояние буферера после пропуска \"%s\": </strong>\n |%s| \n\n", all_op[i].name, *str);
+    free(func_name);
+    func_name = NULL;
 
-        if (all_op[i].args == UNARY)
+    fprintf(log_file, "<strong>Состояние буферера до пропуска \"%s\": </strong>\n |%s| \n\n", all_op[i].name, *str);
+    *str += strlen(now_op->name);
+    fprintf(log_file, "<strong>Состояние буферера после пропуска \"%s\": </strong>\n |%s| \n\n", now_op->name, *str);
+
+    if (now_op->args == UNARY)
+        return ParseUnaryOperation(str, tree, node, now_op);
+
+    return ParseBinaryOperation(str, tree, node, now_op);
+}
+
+Node* ParseUnaryOperation(char** str, Tree* tree,
+                          Node* node, StructOperation* now_op)
+{
+    assert(str);
+    assert(tree);
+
+    if (**str == '(')
+    {
+        *str += 1;
+        fprintf(log_file, "<strong>Пропустил скобку \"(\": </strong>\n |%s| \n\n", *str);
+        SkipSpaces(str);
+
+        node = GetAddSubOp(str, tree, node);
+
+        if (**str == ')')
         {
-            if (**str == '(')
-            {
-                *str += 1;
-                fprintf(log_file, "<strong>Пропустил скобку \"(\": </strong>\n |%s| \n\n", *str);
-                SkipSpaces(str);
-
-                node = GetAddSubOp(str, tree, node);
-
-                if (**str == ')')
-                {
-                    *str += 1;
-                    fprintf(log_file, "<strong>Пропустил скобку \")\": </strong>\n |%s| \n\n", *str);
-                    SkipSpaces(str);
-                    return NewOpNode(all_op[i].op, NULL, node, tree);
-                }
-                fprintf(log_file, "<strong>Ошибка не хвататет \")\"</strong>\n |%s| \n\n", *str);
-            }
+            *str += 1;
+            fprintf(log_file, "<strong>Пропустил скобку \")\": </strong>\n |%s| \n\n", *str);
+            SkipSpaces(str);
+            return NewOpNode(now_op->op, NULL, node, tree);
         }
-
-        else
-        {
-            if (**str == '(')
-            {
-                *str += 1;
-                fprintf(log_file, "<strong>Пропустил скобку \"(\": </strong>\n |%s| \n\n", *str);
-                SkipSpaces(str);
-
-                node = GetAddSubOp(str, tree, node);
-
-                if (**str == ',')
-                {
-                    *str += 1;
-                    fprintf(log_file, "<strong>Пропустил запятую \",\": </strong>\n |%s| \n\n", *str);
-                    SkipSpaces(str);
-
-                    Node* right = NULL;
-                    right = GetAddSubOp(str, tree, right);
-
-                    if (**str == ')')
-                    {
-                        *str += 1;
-                        fprintf(log_file, "<strong>Пропустил скобку \")\": </strong>\n |%s| \n\n", *str);
-                        SkipSpaces(str);
-                        return NewOpNode(all_op[i].op, node, right, tree);
-                    }
-                    fprintf(log_file, "<strong>Ошибка не хвататет \")\"</strong>\n |%s| \n\n", *str);
-                }
-                fprintf(log_file, "<strong>Ошибка не хвататет \",\"</strong>\n |%s| \n\n", *str);
-            }
-        }
+        fprintf(log_file, "<strong>Ошибка не хвататет \")\"</strong>\n |%s| \n\n", *str);
     }
 
     return NULL;
 }
 
-Node* GetVariable(char** str, Tree* tree, Node* node)
+Node* ParseBinaryOperation(char** str, Tree* tree,
+                           Node* node, StructOperation* now_op)
+{
+    assert(str);
+    assert(tree);
+
+    if (**str == '(')
+    {
+        *str += 1;
+        fprintf(log_file, "<strong>Пропустил скобку \"(\": </strong>\n |%s| \n\n", *str);
+        SkipSpaces(str);
+
+        node = GetAddSubOp(str, tree, node);
+
+        if (**str == ',')
+        {
+            *str += 1;
+            fprintf(log_file, "<strong>Пропустил запятую \",\": </strong>\n |%s| \n\n", *str);
+            SkipSpaces(str);
+
+            Node* right = NULL;
+            right = GetAddSubOp(str, tree, right);
+
+            if (**str == ')')
+            {
+                *str += 1;
+                fprintf(log_file, "<strong>Пропустил скобку \")\": </strong>\n |%s| \n\n", *str);
+                SkipSpaces(str);
+                return NewOpNode(now_op->op, node, right, tree);
+            }
+            fprintf(log_file, "<strong>Ошибка не хвататет \")\"</strong>\n |%s| \n\n", *str);
+        }
+        fprintf(log_file, "<strong>Ошибка не хвататет \",\"</strong>\n |%s| \n\n", *str);
+    }
+
+    return NULL;
+}
+
+StructOperation* SearchOperation(char* name)
+{
+    assert(name);
+
+    size_t hash_func_name = GetHash(name);
+
+    for (size_t i = 0; i < NUM_OF_OP; ++i)
+    {
+        if (hash_func_name == all_op[i].hash)
+            return &all_op[i];
+    }
+
+    return NULL;
+}
+
+Node* GetVariable(char** str, Tree* tree)
 {
     fprintf(log_file, "<strong>Вызов GetVariable</strong>\n");
     fprintf(log_file, "<strong>Состояние буфера: </strong>\n |%s| \n\n", *str);
@@ -421,7 +447,7 @@ Node* GetVariable(char** str, Tree* tree, Node* node)
 
     while(true)
     {
-        if (!((counter != 0 && IsNum(**str)) || IsSymbolInVarName(**str)))
+        if (!((counter != 0 && isdigit(**str)) || IsSymbolInVarName(**str)))
             break;
 
         var_name[counter] = **str;
@@ -455,7 +481,7 @@ char* GetFuncName(char* str)
     char func_name[MAX_FUNC_LEN] = {};
     size_t size = 0;
 
-    while(*str >= 'a' && *str <= 'z')
+    while(isalpha(*str))
     {
         func_name[size] = *str;
         size++;
@@ -466,12 +492,6 @@ char* GetFuncName(char* str)
     fprintf(log_file, "<strong>Прочитал имя: |%s|</strong>\n |%s| \n\n", func_name, str);
 
     return strdup(func_name);
-}
-
-//  TODO: isdigit();
-bool IsNum(char sym)
-{
-    return (sym >= '0' && sym <= '9');
 }
 
 void SkipSpaces(char** cur_pos)
@@ -509,7 +529,20 @@ void UpdateVarArray(Tree* tree, Variable new_var)
 {
     assert(tree);
 
-    bool is_really_new_var = true;
+    if (IsItNewVariable(tree, new_var))
+    {
+        fprintf(log_file, "<strong>Добавил новую переменную |%s|</strong>\n\n", new_var.var_name);
+
+        tree->var->arr[tree->var->size].var_name = new_var.var_name;
+        tree->var->arr[tree->var->size].var_hash = GetHash(new_var.var_name);
+
+        tree->var->size++;
+    }
+}
+
+bool IsItNewVariable(Tree* tree, Variable new_var)
+{
+    assert(tree);
 
     fprintf(log_file, "<strong>Наичнаю проверку новая ли это переменная</strong>\n\n");
 
@@ -519,19 +552,11 @@ void UpdateVarArray(Tree* tree, Variable new_var)
             strcmp(new_var.var_name, tree->var->arr[i].var_name) == 0)
         {
             fprintf(log_file, "<strong>Переменная |%s| уже есть</strong>\n\n", new_var.var_name);
-            is_really_new_var = false;
+            return false;
         }
     }
 
-    if (is_really_new_var)
-    {
-        fprintf(log_file, "<strong>Добавил новую переменную |%s|</strong>\n\n", new_var.var_name);
-
-        tree->var->arr[tree->var->size].var_name = new_var.var_name;
-        tree->var->arr[tree->var->size].var_hash = GetHash(new_var.var_name);
-
-        tree->var->size++;
-    }
+    return true;
 }
 
 

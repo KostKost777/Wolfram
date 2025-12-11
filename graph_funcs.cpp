@@ -4,6 +4,7 @@
 #include "calculate_expression_funcs.h"
 #include "graph_funcs.h"
 #include "tex_funcs.h"
+#include "double_compare_funcs.h"
 
 void FillFileWIthPointForGraph(const char* file_name,
                                Tree* tree, double x_min, double x_max)

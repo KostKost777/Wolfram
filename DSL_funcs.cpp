@@ -2,6 +2,7 @@
 
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
+#include "double_compare_funcs.h"
 #include "common_funcs.h"
 #include "DSL_funcs.h"
 

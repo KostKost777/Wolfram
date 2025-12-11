@@ -7,6 +7,7 @@
 #include "tex_funcs.h"
 #include "DSL_funcs.h"
 #include "tree_optimization_funcs.h"
+#include "double_compare_funcs.h"
 #include "taylor_funcs.h"
 
 Tree GetTaylorTree(Tree* tree, double x_point, size_t accuracy)
@@ -76,8 +77,8 @@ Node* MakeTaylorTree(Tree* tree, double* taylor_coeffs,
                                       CNST_ ( (double)member) ) );
 
     return ADD_ ( taylor_member,
-                    MakeTaylorTree(tree, taylor_coeffs,
-                                    member + 1, accuracy, var_x));
+                  MakeTaylorTree(tree, taylor_coeffs,
+                                 member + 1, accuracy, var_x) );
 }
 
 Variable* SetNeighborhoodInVarXAndReturn(Tree* tree, double value)

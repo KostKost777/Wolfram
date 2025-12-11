@@ -6,6 +6,7 @@
 #include "new_read_wolfram_database.h"
 #include "common_funcs.h"
 #include "DSL_funcs.h"
+#include "double_compare_funcs.h"
 
 StructOperation all_op[NUM_OF_OP] =
 {

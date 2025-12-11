@@ -7,8 +7,6 @@ const int NUM_OF_VARIABLE = 50;
 
 const int NUM_OF_OP = 21;
 
-const double EPSILON = 10E-6;
-
 extern const char* log_file_name;
 
 enum Status
@@ -105,21 +103,11 @@ void OpenLogFile();
 
 size_t GetHash(const char* str);
 
-bool IsEqualHash(size_t hash1, size_t hash2);
-
 void TreeDtor(Tree* tree);
 
 void DeleteNode(Tree* tree, Node* node);
 
 ArgType GetArgsType(Node* node);
-
-void DefineAndSetArgType(Node* node);
-
-bool IsDoubleEqual(double num1, double num2);
-
-bool IsDoubleBigger(double num1, double num2);
-
-void SetXValue(Tree* tree, double value);
 
 bool IsVarInTree(Node* node);
 

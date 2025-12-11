@@ -4,6 +4,7 @@
 #include "wolfram_dump_funcs.h"
 #include "common_funcs.h"
 #include "calculate_expression_funcs.h"
+#include "double_compare_funcs.h"
 
 void RequestVariableValue(Tree* tree)
 {
@@ -106,4 +107,20 @@ double GetVariableValue(Tree* tree, char* var_name)
 
     fprintf(log_file, "Я не знаю такой переменной |%s|\n\n", var_name);
     return 0;
+}
+
+void SetXValue(Tree* tree, double value)
+{
+    assert(tree);
+
+    size_t hash_x = GetHash("x");
+
+    for (size_t i = 0; i < tree->var->size; ++i)
+    {
+        if (tree->var->arr[i].var_hash == hash_x)
+        {
+            tree->var->arr[i].var_data = value;
+            return;
+        }
+    }
 }

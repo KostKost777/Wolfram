@@ -11,6 +11,8 @@ struct Buffer
 
 void SkipSpaces(char** cur_pos);
 
+void DefineAndSetArgType(Node* node);
+
 void BufferDtor(Buffer* buffer);
 
 int GetSizeOfFile(const char* filename);

@@ -5,6 +5,7 @@
 #include "tex_funcs.h"
 #include "common_funcs.h"
 #include "wolfram_dump_funcs.h"
+#include "double_compare_funcs.h"
 
 void LatexInit()
 {
@@ -82,7 +83,7 @@ void PrintTaylor(double* taylor_coeffs, double x_point, size_t accuracy)
     if (IsDoubleEqual(x_point, 0))
         fprintf(tex_file, " + o(x ^ %llu)", accuracy);
     else
-        fprintf(tex_file, " + o((x - %lf) ^ %llu)", x_point, accuracy);
+        fprintf(tex_file, " + o((x - %lg) ^ %llu)", x_point, accuracy);
 
     fprintf(tex_file, "\\end{dmath*}");
 
@@ -161,7 +162,7 @@ void PrintPictureInLatex(const char* name_of_graph_file)
 {
     FILE* tex_file = fopen(tex_file_name, "a");
 
-    fprintf(tex_file, "\\includegraphics[width=0.7\\paperwidth]{%s}",
+    fprintf(tex_file, "\\includegraphics[width=0.5\\paperwidth]{%s}",
                                                 name_of_graph_file);
 
     fclose(tex_file);

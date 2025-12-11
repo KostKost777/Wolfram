@@ -18,7 +18,7 @@ void ExecuteUnaryOperationWithConstants(Node* node, Tree* tree,
                                         OpFuncPtr func);
 
 void ExecuteBinaryOperationWithConstants(Node* node, Tree* tree,
-                                        OpFuncPtr func);
+                                         OpFuncPtr func);
 
 void RemoveNeutralElement(Tree* tree, Node* node_parent,
                           Node* neutral_node);

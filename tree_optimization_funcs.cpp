@@ -4,6 +4,7 @@
 #include "wolfram_dump_funcs.h"
 #include "common_funcs.h"
 #include "tree_optimization_funcs.h"
+#include "double_compare_funcs.h"
 #include "tex_funcs.h"
 
 void OptimizeTree(Tree* tree)

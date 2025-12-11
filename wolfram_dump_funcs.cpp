@@ -3,6 +3,7 @@
 #include "wolfram_funcs.h"
 #include "wolfram_dump_funcs.h"
 #include "new_read_wolfram_database.h"
+#include "double_compare_funcs.h"
 #include "common_funcs.h"
 
 const char* tex_file_name = "wolfram_res.tex";
