@@ -19,7 +19,7 @@ Tree GetDerivateTree(Tree* tree)
 
     derivate_tree.root = DifferentiateTree(&derivate_tree, tree->root);
 
-    TreeDump(&derivate_tree);
+    //TreeDump(&derivate_tree);
 
     OptimizeTree(&derivate_tree);
 

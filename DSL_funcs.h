@@ -37,6 +37,12 @@
 #define RIGHT_COMP_FUNC_(var) NewOpNode(MUL, var, dR, tree)
 #define LEFT_COMP_FUNC_(var) NewOpNode(MUL, var, dL, tree)
 
+void SonNeutralOptimize(Tree* tree,
+                        Node* node, Node* son, double el, bool* status);
+
+void AbsorbOptimize(Tree* tree, Node* node,
+                    Node* son, double el, double new_el, bool* status);
+
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree);
 
 Node* NewNumNode(double num, Node* left, Node* right, Tree* tree);

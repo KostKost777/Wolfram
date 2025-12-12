@@ -27,12 +27,12 @@ void TreeDump(Tree* tree)
                           "rankdir = HR;\n"
                           "splines = true\n");
 
-    PrintBazeNode(graphiz_file, tree);
+    //PrintBazeNode(graphiz_file, tree);
 
     if (tree->size > 0) {
         //printf("DUMP_TREE_ROOT: %p\n", tree->root);
-        PrintBazeEdge(graphiz_file, tree);
-        PrintTree(tree->root, graphiz_file);
+        //PrintBazeEdge(graphiz_file, tree);
+       // PrintTree(tree->root, graphiz_file);
 
         PrintTexTree(tree->root);
     }

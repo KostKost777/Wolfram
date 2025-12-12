@@ -5,6 +5,7 @@
 #include "double_compare_funcs.h"
 #include "common_funcs.h"
 #include "DSL_funcs.h"
+#include "tree_optimization_funcs.h"
 
 Node* NewOpNode(Operation op, Node* left, Node* right, Tree* tree)
 {
@@ -105,3 +106,34 @@ Node* CopySubtree(Tree* tree, Node* node)
 
     return NULL;
 }
+
+void SonNeutralOptimize(Tree* tree, Node* node,
+                        Node* son,  double el, bool* status)
+{
+    assert(tree);
+
+    if (node != NULL && *status && son!= NULL && son->type == NUM
+        && IsDoubleEqual(son->value.num, el))
+    {                                                                                                           \
+        if (son == node->right ) OptimizeNeutralElement(node->left, tree);
+        if (son == node->left ) OptimizeNeutralElement(node->right, tree);
+        RemoveNeutralElement(tree, node, son);
+        *status = false;
+    }
+}
+
+void AbsorbOptimize(Tree* tree, Node* node,
+                    Node* son, double el, double new_el, bool* status)
+{
+    assert(tree);
+
+    if (node != NULL && *status && son != NULL && son->type == NUM
+            && IsDoubleEqual(son->value.num, el))
+    {
+        DeleteNode(tree, node);
+        node->type = NUM;
+        node->value.num = new_el;
+        *status = false;
+    }
+}
+

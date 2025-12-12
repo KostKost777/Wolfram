@@ -1,8 +1,8 @@
 FLAGS = -g -DDEBUG
 all: wolf
 
-wolf: tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o
-	g++ $(FLAGS) tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o -o wolf
+wolf: file_with_points_funcs.o tangent_funcs.o double_compare_funcs.o graph_funcs.o taylor_funcs.o tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o
+	g++ $(FLAGS) file_with_points_funcs.o tangent_funcs.o double_compare_funcs.o graph_funcs.o taylor_funcs.o tree_optimization_funcs.o derivate_tree_funcs.o DSL_funcs.o calculate_expression_funcs.o tex_funcs.o common_funcs.o wolfram_main.o wolfram_funcs.o wolfram_dump_funcs.o new_read_wolfram_database.o -o wolf
 
 wolfram_main.o: wolfram_main.cpp
 	g++ $(FLAGS) -c wolfram_main.cpp
@@ -34,4 +34,17 @@ derivate_tree_funcs.o: derivate_tree_funcs.cpp
 tree_optimization_funcs.o: tree_optimization_funcs.cpp
 	g++ $(FLAGS) -c tree_optimization_funcs.cpp
 
+taylor_funcs.o: taylor_funcs.cpp
+	g++ $(FLAGS) -c taylor_funcs.cpp
 
+graph_funcs.o: graph_funcs.cpp
+	g++ $(FLAGS) -c graph_funcs.cpp
+
+double_compare_funcs.o: double_compare_funcs.cpp
+	g++ $(FLAGS) -c double_compare_funcs.cpp
+
+tangent_funcs.o: tangent_funcs.cpp
+	g++ $(FLAGS) -c tangent_funcs.cpp
+
+file_with_points_funcs.o: file_with_points_funcs.cpp
+	g++ $(FLAGS) -c file_with_points_funcs.cpp

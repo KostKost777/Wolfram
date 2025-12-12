@@ -6,6 +6,7 @@
 #include "tree_optimization_funcs.h"
 #include "double_compare_funcs.h"
 #include "tex_funcs.h"
+#include "DSL_funcs.h"
 
 void OptimizeTree(Tree* tree)
 {
@@ -37,12 +38,16 @@ void OptimizeNeutralElement(Node* node, Tree* tree)
     {
         switch(node->value.op)
         {
-            case ADD:
-            case SUB: Optimize_ADD_SUB_NeutralElement(node, tree);
+            case ADD: Optimize_ADD_NeutralElement(node, tree);
                       break;
 
-            case MUL:
-            case DIV: Optimize_MUL_DIV_NeutralElement(node, tree);
+            case SUB: Optimize_SUB_NeutralElement(node, tree);
+                      break;
+
+            case MUL: Optimize_MUL_NeutralElement(node, tree);
+                      break;
+
+            case DIV: Optimize_DIV_NeutralElement(node, tree);
                       break;
 
             case POW:
@@ -77,112 +82,67 @@ void OptimizeNeutralElement(Node* node, Tree* tree)
         OptimizeNeutralElement(node->right, tree);
 }
 
-void Optimize_ADD_SUB_NeutralElement(Node* node, Tree* tree)
+void Optimize_ADD_NeutralElement(Node* node, Tree* tree)
 {
     assert(tree);
     assert(node);
+    bool status = true;
 
-    if (   node->right->type == NUM
-        && IsDoubleEqual(node->right->value.num, 0))
-    {
-        OptimizeNeutralElement(node->left, tree);
-        RemoveNeutralElement(tree, node, node->right);
-    }
-
-    else if (   node->left->type == NUM
-             && node->value.op== ADD
-             && IsDoubleEqual(node->left->value.num, 0))
-    {
-        OptimizeNeutralElement(node->right, tree);
-        RemoveNeutralElement(tree, node, node->left);
-    }
-
-//     else if (   node->left->type == NUM
-//              && node->value.op == SUB
-//              && IsDoubleEqual(node->left->value.num, 0))
-//     {
-//         OptimizeNeutralElement(node->right, tree);
-//
-//         node->value.op = MUL;
-//         node->left->value.num = -1;
-//     }
+    SonNeutralOptimize(tree, node, node->right,  0, &status);
+    SonNeutralOptimize(tree, node, node->left,  0, &status);
 }
 
-void Optimize_MUL_DIV_NeutralElement(Node* node, Tree* tree)
+void Optimize_SUB_NeutralElement(Node* node, Tree* tree)
 {
     assert(tree);
     assert(node);
+    bool status = true;
 
-    if (   node->right->type == NUM
-        && IsDoubleEqual(node->right->value.num, 1))
-    {
-        OptimizeNeutralElement(node->left, tree);
-        RemoveNeutralElement(tree, node, node->right);
-    }
+    SonNeutralOptimize(tree, node, node->right,  0, &status);
+}
 
-    else if (   node->left->type == NUM
-            && node->value.op == MUL
-            && IsDoubleEqual(node->left->value.num, 1))
-    {
-        OptimizeNeutralElement(node->right, tree);
-        RemoveNeutralElement(tree, node, node->left);
-    }
+void Optimize_MUL_NeutralElement(Node* node, Tree* tree)
+{
+    assert(tree);
+    assert(node);
+    bool status = true;
 
-    else if (   node->left->type == NUM
-             && IsDoubleEqual(node->left->value.num, 0))
-    {
-        DeleteNode(tree, node);
+    SonNeutralOptimize(tree, node, node->right,  1, &status);
+    SonNeutralOptimize(tree, node, node->left,  1, &status);
 
-        node->type = NUM;
-        node->value.num = 0;
-    }
+    AbsorbOptimize(tree, node, node->right, 0, 0, &status);
+    AbsorbOptimize(tree, node, node->left, 0, 0, &status);
+}
 
-    else if (   node->right->type == NUM
-             && IsDoubleEqual(node->right->value.num, 0)
-             && node->value.op == MUL)
-    {
-        DeleteNode(tree, node);
+void Optimize_DIV_NeutralElement(Node* node, Tree* tree)
+{
+    assert(tree);
+    assert(node);
+    bool status = true;
 
-        node->type = NUM;
-        node->value.num = 0;
-    }
+    SonNeutralOptimize(tree, node, node->right,  1,&status);
+
+    AbsorbOptimize(tree, node, node->left, 0, 0, &status);
 }
 
 void Optimize_POW_EXP_NeutralElement(Node* node, Tree* tree)
 {
     assert(tree);
     assert(node);
+    bool status = true;
 
-    if (   node->right->type == NUM
-        && IsDoubleEqual(node->right->value.num, 1))
-    {
-        OptimizeNeutralElement(node->left, tree);
-        RemoveNeutralElement(tree, node, node->right);
-    }
+    SonNeutralOptimize(tree, node, node->right,  1, &status);
 
-    else if (   node->right->type == NUM
-             && IsDoubleEqual(node->right->value.num, 0))
-    {
-        DeleteNode(tree, node);
-
-        node->type = NUM;
-        node->value.num = 1;
-    }
+    AbsorbOptimize(tree, node, node->right, 0, 1, &status);
 }
 
 void Optimize_LOG_LN_NeutralElement(Node* node, Tree* tree)
 {
     assert(tree);
     assert(node);
+    bool status = true;
 
-    if (   node->right->type == NUM
-        && IsDoubleEqual(node->right->value.num, 1))
-    {
-        DeleteNode(tree, node);
-
-        node->type = NUM;
-        node->value.num = 0;
-    }
+    AbsorbOptimize(tree, node, node->right, 1, 0, &status);
 }
 
 double OptimizeConstants(Node* node, Tree* tree)

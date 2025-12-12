@@ -7,8 +7,10 @@ void OptimizeNeutralElement(Node* node, Tree* tree);
 
 double OptimizeConstants(Node* node, Tree* tree);
 
-void Optimize_ADD_SUB_NeutralElement(Node* node, Tree* tree);
-void Optimize_MUL_DIV_NeutralElement(Node* node, Tree* tree);
+void Optimize_ADD_NeutralElement(Node* node, Tree* tree);
+void Optimize_MUL_NeutralElement(Node* node, Tree* tree);
+void Optimize_SUB_NeutralElement(Node* node, Tree* tree);
+void Optimize_DIV_NeutralElement(Node* node, Tree* tree);
 void Optimize_POW_EXP_NeutralElement(Node* node, Tree* tree);
 void Optimize_LOG_LN_NeutralElement(Node* node, Tree* tree);
 
