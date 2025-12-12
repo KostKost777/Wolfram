@@ -5,6 +5,7 @@
 #include "graph_funcs.h"
 #include "tex_funcs.h"
 #include "double_compare_funcs.h"
+#include "file_with_points_funcs.h"
 
 void FillFileWIthPointForGraph(const char* file_name,
                                Tree* tree, double x_min, double x_max)
@@ -24,7 +25,7 @@ void FillFileWIthPointForGraph(const char* file_name,
     fclose(file_with_points);
 }
 
-void MakeGraph(char* func1, char* func2, Scale* scale)
+void MakeGraph(char* func1, char* func2, char* func3, Scale* scale)
 {
     const char* name_of_graph_file = "graph.png";
     FILE *gnuplot = popen("gnuplot", "w");
@@ -34,7 +35,8 @@ void MakeGraph(char* func1, char* func2, Scale* scale)
 
     fprintf(gnuplot, "set title 'График функции'\n");
     fprintf(gnuplot, "set grid\n");
-    fprintf(gnuplot, "set key top left\n");
+    fprintf(gnuplot, "set key top right\n");
+    fprintf(gnuplot, "set samples 100000\n");
     fprintf(gnuplot, "set xlabel 'x'\n");
     fprintf(gnuplot, "set ylabel 'y'\n");
 
@@ -52,8 +54,11 @@ void MakeGraph(char* func1, char* func2, Scale* scale)
         fprintf(gnuplot, "set yrange [%lf:%lf]\n", scale->y_min, scale->y_max);
     }
 
-    fprintf(gnuplot, "plot %s title 'Исходная функция', \\\n", func1);
-    fprintf(gnuplot, "     %s title 'Тейлор'\n", func2);
+    fprintf(gnuplot, "plot %s lw 2 title 'Исходная функция', \\\n", func1);
+    fprintf(gnuplot, "%s lw 2 title 'Тейлор', \\\n", func2);
+    fprintf(gnuplot, "%s lw 2 title 'Касательная', \\\n", func3);
+    fprintf(gnuplot, "\"%s\" using 1:2 with points pt 7 ps 1 lc \"red\" notitle \n", points_file_name);
+
 
     fflush(gnuplot);
     pclose(gnuplot);
@@ -237,7 +242,7 @@ void PrintExpression_EXP(Node* node, FILE* expression_buffer)
     assert(node);
     assert(expression_buffer);
 
-    fprintf(expression_buffer, "e ** ( ");
+    fprintf(expression_buffer, "exp( ");
    GetNodeString(node->right, expression_buffer);
     fprintf(expression_buffer, " )");
 }

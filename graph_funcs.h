@@ -18,7 +18,7 @@ void GetNodeString(Node* node, FILE* expression_buffer);
 
 void SetStringOfExpression(Tree* tree, char* str_expression);
 
-void MakeGraph(char* func1, char* func2, Scale* scale);
+void MakeGraph(char* func1, char* func2, char* func3, Scale* scale);
 
 void PrintExpression_ADD_SUB(Node* node, FILE*expression_buffer);
 

@@ -10,6 +10,8 @@
 #include "derivate_tree_funcs.h"
 #include "taylor_funcs.h"
 #include "graph_funcs.h"
+#include "tangent_funcs.h"
+#include "file_with_points_funcs.h"
 
 const char* database_file_name = "database2.txt";
 
@@ -19,6 +21,7 @@ int main(int argc, const char* argv[])
     atexit(CloseLaTex);
     OpenLogFile();
     LatexInit();
+    FileWithPointsInit();
 
     if (argc > 1)
         database_file_name = argv[1];
@@ -49,6 +52,10 @@ int main(int argc, const char* argv[])
 
     derivate_tree = GetDerivateTree(&tree);
 
+    PrintMessageInLaTex("Исходное выражение: ");
+
+    TreeDump(&tree);
+
     PrintMessageInLaTex("Первая производная: ");
     TreeDump(&derivate_tree);
 
@@ -67,14 +74,24 @@ int main(int argc, const char* argv[])
     PrintMessageInLaTex("Найдем разложение по Тейлору: ");
     Tree taylor_tree = GetTaylorTree(&tree, x_point, accuracy);
 
+    printf("Enter the X coord of touch point: ");
+    scanf("%lf", &x_point);
+
+    PrintMessageInLaTex("Найдем уравнение касательной: ");
+    Tree tangent_tree = GetTangentTree(&tree, x_point);
+    TreeDump(&tangent_tree);
+
     char str_taylor_tree[MAX_LEN_OF_EXPRESSION] = {};
     SetStringOfExpression(&taylor_tree, str_taylor_tree);
 
     char str_tree[MAX_LEN_OF_EXPRESSION] = {};
     SetStringOfExpression(&tree, str_tree);
 
+    char str_tanget_tree[MAX_LEN_OF_EXPRESSION] = {};
+    SetStringOfExpression(&tangent_tree, str_tanget_tree);
+
     PrintMessageInLaTex("Построим графики: ");
-    MakeGraph(str_tree, str_taylor_tree, &scale);
+    MakeGraph(str_tree, str_taylor_tree, str_tanget_tree, &scale);
 
     TreeDtor(&taylor_tree);
 

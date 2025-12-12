@@ -18,11 +18,11 @@ void OptimizeTree(Tree* tree)
        OptimizeConstants(tree->root, tree);
        OptimizeNeutralElement(tree->root, tree);
 
-       if (old_size != tree->size)
-       {
-            PrintMessageInLaTex("Немного упростим: ");
-            TreeDump(tree);
-       }
+    //    if (old_size != tree->size)
+    //    {
+    //         PrintMessageInLaTex("Немного упростим: ");
+    //         TreeDump(tree);
+    //    }
     }
 }
 

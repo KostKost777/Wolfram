@@ -506,7 +506,7 @@ void PrintLaTex_NUM(FILE* tex_file, double num)
 {
     assert(tex_file);
 
-    if (num < 0)
+    if (IsDoubleBigger(0, num))
         fprintf(tex_file, "\\left(%g\\right)", num);
     else
         fprintf(tex_file, "%g", num);

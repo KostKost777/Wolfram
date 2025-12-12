@@ -8,13 +8,17 @@
 #include "DSL_funcs.h"
 #include "tree_optimization_funcs.h"
 #include "double_compare_funcs.h"
+#include "file_with_points_funcs.h"
 #include "taylor_funcs.h"
 
 Tree GetTaylorTree(Tree* tree, double x_point, size_t accuracy)
 {
     assert(tree);
 
-    Variable* var_x = SetNeighborhoodInVarXAndReturn(tree, x_point);
+    Variable* var_x = SetVarXAndReturn(tree, x_point);
+
+    double y_point = CalculateExpression(tree, tree->root);
+    AddPointInFileWithPoints(x_point, y_point);
 
     Tree taylor_tree = {};
     TreeCtor(&taylor_tree);
@@ -36,7 +40,7 @@ Tree GetTaylorTree(Tree* tree, double x_point, size_t accuracy)
 
         Tree new_derivate_tree = GetDerivateTree(&derivate_tree);
 
-        TreeDtor(&derivate_tree);
+        //TreeDtor(&derivate_tree);
         derivate_tree = new_derivate_tree;
     }
 
@@ -81,7 +85,7 @@ Node* MakeTaylorTree(Tree* tree, double* taylor_coeffs,
                                  member + 1, accuracy, var_x) );
 }
 
-Variable* SetNeighborhoodInVarXAndReturn(Tree* tree, double value)
+Variable* SetVarXAndReturn(Tree* tree, double value)
 {
     size_t hash_x = GetHash("x");
 
